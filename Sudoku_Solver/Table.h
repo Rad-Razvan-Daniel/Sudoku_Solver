@@ -2,10 +2,12 @@
 class Table
 {
 	int table[9][9];
+	bool isValid(const int& line, const int& column);
+	void initTable();
+
 public:
 	Table();
-	void initTable();
-	bool isValid(int line, int column);
+	~Table();
 	void printTable();
 	bool solveSudoku();
 };
