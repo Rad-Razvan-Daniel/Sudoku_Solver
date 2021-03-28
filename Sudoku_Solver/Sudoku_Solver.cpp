@@ -5,20 +5,9 @@
 using namespace std;
 int main()
 {
-	cout << 7 % 3;
 	Table table;
-	/*
-	0 0 0|0 0 0|0 0 0
-	0 0 0|0 0 0|0 0 0
-	0 0 0|0 0 0|0 0 0
-	----------------
-	0 0 0|0 0 0|0 0 0
-	0 0 0|0 0 0|0 0 0
-	0 0 0|0 0 0|0 0 0
-	-----------------
-	0 0 0|0 0 0|0 0 0
-	0 0 0|0 0 0|0 0 0
-	0 0 0|0 0 0|0 0 0
-	*/
-	table.solveSudoku();
+    table.printTable();
+	cout << endl << table.solveSudoku() << endl;
+
+	table.printTable();
 }
