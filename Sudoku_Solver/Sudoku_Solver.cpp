@@ -7,7 +7,6 @@ int main()
 {
 	Table table;
     table.printTable();
-	cout << endl << table.solveSudoku() << endl;
-
+	cout << table.solveSudoku() << endl;
 	table.printTable();
 }

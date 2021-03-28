@@ -25,6 +25,9 @@ void Table::printTable()
 bool Table::solveSudoku(int line , int column)	//return true if it's been solved
 {												//return false if it's unsolvable
 
+	if (line == 8 && column == 9)
+		return true;
+
 	if (column == 9) {
 		line++;
 		column = 0;
@@ -37,7 +40,6 @@ bool Table::solveSudoku(int line , int column)	//return true if it's been solved
 	for (int nr = 1; nr < 10; nr++)
 	{
 		//check validity
-		cout << "nr " << nr;
 		if (isValid(line,column, nr))
 		{
 			table[line][column] = nr;
@@ -60,7 +62,6 @@ void Table::initTable()
 
 bool Table::isValid(const int line, const int column, int val) //checks if one of the numbers is compatible with the row, column and its box
 {
-	cout << "init validity for " << line << "  " << column << "with val "<< val <<endl;
 	//check row
 	for (int i = 0; i < 8; i++)
 		if (table[line][i] == val) return false;
