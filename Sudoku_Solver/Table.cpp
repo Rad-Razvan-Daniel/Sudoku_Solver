@@ -37,9 +37,10 @@ bool Table::solveSudoku(int line , int column)	//return true if it's been solved
 	for (int nr = 1; nr < 10; nr++)
 	{
 		//check validity
-
+		cout << "nr " << nr;
 		if (isValid(line,column, nr))
 		{
+			table[line][column] = nr;
 			if(solveSudoku(line,column))
 				return true;
 		}
