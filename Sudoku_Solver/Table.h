@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 class Table
 {
 	bool isValid(const int line, const int column, const int val);
@@ -18,6 +20,6 @@ public:
 	Table();
 	~Table();
 	void printTable();
-	bool solveSudoku(int line = 0, int column = 0);
+	bool solve(int line = 0, int column = 0);
 };
 

@@ -1,5 +1,4 @@
 #include "Table.h"
-#include "Functions.h"
 Table::Table()
 {
 	//initTable();
@@ -17,24 +16,23 @@ void Table::printTable()
 		{
 			std::cout << table[i][j];
 		}
-		cout << endl;
+		std::cout << std::endl;
 		
 	}
 }
 
-bool Table::solveSudoku(int line , int column)	//return true if it's been solved
-{												//return false if it's unsolvable
+bool Table::solve(int line , int column)	
+{												
 
 	if (line == 8 && column == 9)
 		return true;
-
+	//safety check because when we solve() we will encounter column+1, which can be 9
 	if (column == 9) {
 		line++;
 		column = 0;
 	}
-	//if the spot is correct by default, we will go to column+1
 	if (table[line][column] != 0)
-		return solveSudoku(line, column+1);
+		return solve(line, column+1);
 
 
 	for (int nr = 1; nr < 10; nr++)
@@ -43,15 +41,16 @@ bool Table::solveSudoku(int line , int column)	//return true if it's been solved
 		if (isValid(line,column, nr))
 		{
 			table[line][column] = nr;
-			if(solveSudoku(line,column))
+			if(solve(line,column))
 				return true;
+
 		}
 		//if we got here, n was wrong, meaning we should make this position the initial value; 0
 		table[line][column] = 0;
 	}
 	return false;
 }
-
+    
 void Table::initTable()
 {
 	for (int i = 0; i < 9; i++)

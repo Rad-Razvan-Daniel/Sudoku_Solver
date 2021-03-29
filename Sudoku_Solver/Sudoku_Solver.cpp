@@ -1,12 +1,11 @@
-#include <iostream>
-#include <fstream>
 #include "Table.h"
-#include "Functions.h"
+#include "Game.h"
 using namespace std;
 int main()
 {
 	Table table;
     table.printTable();
-	cout << table.solveSudoku() << endl;
+	cout << table.solve() << endl;
 	table.printTable();
+	Game game;
 }
