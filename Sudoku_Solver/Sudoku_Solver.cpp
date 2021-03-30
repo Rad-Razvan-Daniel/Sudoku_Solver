@@ -8,4 +8,5 @@ int main()
 	cout << table.solve() << endl;
 	table.printTable();
 	Game game;
+	game.runPlease();
 }
