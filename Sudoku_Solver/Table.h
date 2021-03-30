@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-
 class Table
 {
 	bool isValid(const int line, const int column, const int val);

@@ -1,5 +1,4 @@
 #include "Game.h"
-
 Game::Game()
 {
 	initWindow();
@@ -14,7 +13,7 @@ void Game::runPlease()
 {
 	while (window->isOpen())
 	{
-
+		update();
 		render();
 	}
 }
@@ -38,16 +37,21 @@ void Game::initWindow()
 
 	window = new sf::RenderWindow(sf::VideoMode(800, 600), "tet");
 	window->setFramerateLimit(frame_limit);
-	window->setVerticalSyncEnabled(1);
+	window->setVerticalSyncEnabled(vsync);
 }
 
 void Game::initGame()
 {
+
+	Table table;
+	table.printTable();
+	std::cout << table.solve() << std::endl;
+	table.printTable();
 }
 
 void Game::render()
-{ /*
-	window->clear(sf::Color::Black);*/
+{ 
+	
 	window->display();
 }
 
@@ -78,5 +82,5 @@ void Game::updateEvents()
 
 void Game::update()
 {
-
+	updateEvents();
 }
