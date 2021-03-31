@@ -1,6 +1,7 @@
 #include "Game.h"
 Game::Game()
 {
+	initFont();
 	initWindow();
 	initGame();
 	maingame = new GameSprite;
@@ -46,6 +47,12 @@ void Game::initWindow()
 	window->setVerticalSyncEnabled(vsync);
 }
 
+void Game::initFont()
+{
+	text.setFont(font);
+	text.setString("hi");
+}
+
 void Game::initGame()
 {
 
@@ -60,6 +67,7 @@ void Game::render()
 { 
 	window->clear();
 	renderTextures();
+	renderFonts();
 	window->display();
 }
 
@@ -70,6 +78,10 @@ void Game::renderTextures()
 	{
 		window->draw(maingame->sprites[i]);
 	}
+}
+
+void Game::renderFonts()
+{
 }
 
 void Game::updateEvents()

@@ -21,7 +21,3 @@ void GameSprite::popSprite()
 	textures.pop_back();  
 }
 
-GameSprite::GameSprite()
-{
-
-}

@@ -12,14 +12,18 @@ class Game
 	sf::Event event;
 	GameSprite* maingame = nullptr;
 	int bg;
+	sf::Font font;
+	sf::Text text;
 public:
 	Game();
 	~Game();
 	void runPlease();
 	void initWindow();
+	void initFont();
 	void initGame();
 	void render();
 	void renderTextures();
+	void renderFonts();
 	void updateEvents();
 	void update();
 };
