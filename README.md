@@ -4,4 +4,4 @@ I use SFML for rendering, some of the event handling and manipulating textures a
 All the code was made by me, dating the start of my GitHub activity. 
 
 Algorithms used: Backtracking, and I plan on implementing Stochastic search.
-Right now it's incomplete but I plan on making a user interface and generating the sudoku while playing. 
+Right now it's incomplete but I plan on making a user interface and generating a random sudoku each time the game is launched. 
