@@ -1,0 +1,4 @@
+800 600
+83
+0
+Sudoku Solver

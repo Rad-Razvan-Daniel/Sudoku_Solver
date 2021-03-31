@@ -4,10 +4,9 @@ Game::Game()
 	initWindow();
 	initGame();
 	maingame = new GameSprite;
-	maingame->newSprite("img.jpg");
+	maingame->pushSprite("img.jpg");
 
 }
-
 Game::~Game()
 {
 	delete window;
@@ -30,16 +29,19 @@ void Game::initWindow()
 		frame_limit = 30;
 
 	std::ifstream read;
-	read.open("settings.txt");
+	read.open("Resources\\settings.txt");
+	std::string x = "Solver";
 	if (read.is_open())
 	{
+		
 		read >> width >> height;
 		read >> frame_limit;
 		read >> vsync;
+		read >> x;
 		read.close();
 	}
 
-	window = new sf::RenderWindow(sf::VideoMode(800, 600), "tet");
+	window = new sf::RenderWindow(sf::VideoMode(800, 600),x);
 	window->setFramerateLimit(frame_limit);
 	window->setVerticalSyncEnabled(vsync);
 }
