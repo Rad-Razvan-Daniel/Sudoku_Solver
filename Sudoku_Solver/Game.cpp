@@ -50,7 +50,7 @@ void Game::initFont()
 {
 	font.loadFromFile("font.ttf");
 	btn = new Button("Solve", font);
-	btn2 = new Button("Restart",font,30,30);
+	btn2 = new Button("Restart",font);
 	btn->text.setFillColor(sf::Color::Black);
 }
 
@@ -66,8 +66,6 @@ void Game::render()
 {
 	window->clear();
 	renderTextures();
-
-	window->draw(btn->text);
 	renderFonts();
 	window->display();
 }
@@ -83,6 +81,8 @@ void Game::renderTextures()
 
 void Game::renderFonts()
 {
+	window->draw(btn->text);
+	window->draw(btn2->text);
 }
 
 void Game::updateEvents()

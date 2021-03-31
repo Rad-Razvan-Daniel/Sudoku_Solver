@@ -1,11 +1,11 @@
 #include "Button.h"
 
-Button::Button(std::string str, sf::Font font, int x, int y)
+Button::Button(std::string str, sf::Font font, int x, int y, sf::Color color)
 {
 
-	
-	text.setFont(font);
-	text.setFillColor(sf::Color::Blue);
+	this->font = font;
+	text.setFont(this->font);
+	text.setFillColor(color);
 	text.setString(str);
 	text.setPosition(x, y);
 }
