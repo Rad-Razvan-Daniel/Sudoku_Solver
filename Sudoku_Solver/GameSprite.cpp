@@ -1,6 +1,5 @@
 #include "GameSprite.h"
 
-
 size_t GameSprite::pushSprite(const std::string& PATH)
 {
 	//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
@@ -18,6 +17,5 @@ size_t GameSprite::pushSprite(const std::string& PATH)
 
 void GameSprite::popSprite()
 {
-	textures.pop_back();  
+	textures.pop_back();
 }
-

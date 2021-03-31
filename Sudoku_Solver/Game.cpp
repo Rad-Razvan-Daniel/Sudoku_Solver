@@ -1,12 +1,12 @@
 #include "Game.h"
 Game::Game()
 {
-	initFont();
+
 	initWindow();
 	initGame();
+	initFont();
 	maingame = new GameSprite;
 	maingame->pushSprite("img.jpg");
-
 }
 Game::~Game()
 {
@@ -25,8 +25,8 @@ void Game::runPlease()
 void Game::initWindow()
 {
 	int vsync = 0;
-	int height = 800, 
-		width = 600, 
+	int height = 800,
+		width = 600,
 		frame_limit = 30;
 
 	std::ifstream read;
@@ -34,7 +34,6 @@ void Game::initWindow()
 	std::string x = "Solver";
 	if (read.is_open())
 	{
-		
 		read >> width >> height;
 		read >> frame_limit;
 		read >> vsync;
@@ -42,21 +41,21 @@ void Game::initWindow()
 		read.close();
 	}
 
-	window = new sf::RenderWindow(sf::VideoMode(800, 600),x);
+	window = new sf::RenderWindow(sf::VideoMode(800, 600), x);
 	window->setFramerateLimit(frame_limit);
 	window->setVerticalSyncEnabled(vsync);
 }
 
 void Game::initFont()
 {
-	text.setFont(font);
-	text.setString("hi");
+	font.loadFromFile("font.ttf");
+	btn = new Button("Solve", font);
+	btn2 = new Button("Restart",font,30,30);
+	btn->text.setFillColor(sf::Color::Black);
 }
 
 void Game::initGame()
 {
-
-	
 	Table table;
 	//table.printTable();
 	//std::cout << table.solve() << std::endl;
@@ -64,9 +63,11 @@ void Game::initGame()
 }
 
 void Game::render()
-{ 
+{
 	window->clear();
 	renderTextures();
+
+	window->draw(btn->text);
 	renderFonts();
 	window->display();
 }
@@ -86,12 +87,10 @@ void Game::renderFonts()
 
 void Game::updateEvents()
 {
-
 	while (window->pollEvent(event))
 	{
 		switch (event.type)
 		{
-
 		case sf::Event::Closed:
 			window->close();
 			break;

@@ -2,19 +2,22 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
-
+#include <string>
 #include "Table.h"
 #include "GameSprite.h"
-
+#include "Button.h"
 class Game
 {
+	Button *btn;
+	Button *btn2;
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
 	GameSprite* maingame = nullptr;
 	int bg;
 	sf::Font font;
-	sf::Text text;
+
 public:
+	sf::Text text;
 	Game();
 	~Game();
 	void runPlease();
@@ -27,4 +30,3 @@ public:
 	void updateEvents();
 	void update();
 };
-
