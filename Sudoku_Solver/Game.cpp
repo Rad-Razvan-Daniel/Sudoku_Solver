@@ -1,13 +1,16 @@
 #include "Game.h"
 Game::Game()
 {
-	maingame.newSprite("img.jpg");
 	initWindow();
 	initGame();
+	maingame = new GameSprite;
+	maingame->newSprite("img.jpg");
+
 }
 
 Game::~Game()
 {
+	delete window;
 }
 
 void Game::runPlease()
@@ -60,9 +63,10 @@ void Game::render()
 
 void Game::renderTextures()
 {
-	for (int i = 0; i < maingame.sprites.size(); i++)
+	window->draw(maingame->sprites[bg]);
+	for (int i = 0; i < maingame->sprites.size(); i++)
 	{
-		window->draw(maingame.sprites[i]);
+		window->draw(maingame->sprites[i]);
 	}
 }
 

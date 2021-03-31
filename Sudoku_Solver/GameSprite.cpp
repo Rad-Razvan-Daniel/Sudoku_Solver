@@ -1,16 +1,18 @@
 #include "GameSprite.h"
 
 
-int GameSprite::newSprite(std::string PATH)
+size_t GameSprite::newSprite(const std::string& PATH)
 {
-	sf::Texture texture;
+	//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
+	auto texture = std::make_unique<sf::Texture>();
+	texture->loadFromFile(PATH);
 	sf::Sprite sprite;
-	//set texture and sprite accordingly
-	texture.loadFromFile(PATH);
-	sprite.setTexture(texture);
-	//add the sprite to the vector which keeps track of sprites loaded
+
+	sprite.setTexture(*texture);
+
 	sprites.push_back(sprite);
-	//return the position at which the new sprite was inserted
+	textures.push_back(std::move(texture));
+
 	return sprites.size();
 }
 

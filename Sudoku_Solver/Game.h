@@ -10,7 +10,8 @@ class Game
 {
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
-	GameSprite maingame;
+	GameSprite* maingame = nullptr;
+	int bg;
 public:
 	Game();
 	~Game();
