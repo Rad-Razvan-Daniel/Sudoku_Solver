@@ -1,6 +1,7 @@
 #include "Game.h"
 Game::Game()
 {
+	maingame.newSprite("img.jpg");
 	initWindow();
 	initGame();
 }
@@ -43,16 +44,26 @@ void Game::initWindow()
 void Game::initGame()
 {
 
+	
 	Table table;
-	table.printTable();
-	std::cout << table.solve() << std::endl;
-	table.printTable();
+	//table.printTable();
+	//std::cout << table.solve() << std::endl;
+	//table.printTable();
 }
 
 void Game::render()
 { 
-	
+	window->clear();
+	renderTextures();
 	window->display();
+}
+
+void Game::renderTextures()
+{
+	for (int i = 0; i < maingame.sprites.size(); i++)
+	{
+		window->draw(maingame.sprites[i]);
+	}
 }
 
 void Game::updateEvents()

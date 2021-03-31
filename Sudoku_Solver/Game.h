@@ -1,21 +1,16 @@
 #pragma once
-#include "SFML/Graphics.hpp"
-#include "SFML/Window.hpp"
-#include "SFML/System.hpp"
 #include <fstream>
 #include <vector>
 #include <iostream>
+
 #include "Table.h"
+#include "GameSprite.h"
 
-
-struct textures
-{
-	//std::vector<sf::Sprite> sprites;
-};
 class Game
 {
-	sf::Window* window = nullptr;
+	sf::RenderWindow* window = nullptr;
 	sf::Event event;
+	GameSprite maingame;
 public:
 	Game();
 	~Game();
@@ -23,6 +18,7 @@ public:
 	void initWindow();
 	void initGame();
 	void render();
+	void renderTextures();
 	void updateEvents();
 	void update();
 };
