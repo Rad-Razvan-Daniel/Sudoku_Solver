@@ -24,11 +24,13 @@ void Game::runPlease()
 
 void Game::initWindow()
 {
+	//given initial values in case we can't open settings
 	int vsync = 0;
 	int height = 800,
 		width = 600,
 		frame_limit = 30;
 
+	//open settings and read parameters
 	std::ifstream read;
 	read.open("Resources\\settings.txt");
 	std::string x = "Solver";
@@ -49,9 +51,8 @@ void Game::initWindow()
 void Game::initFont()
 {
 	font.loadFromFile("font.ttf");
-	btn = new Button("Solve", font);
-	btn2 = new Button("Restart",font);
-	btn->text.setFillColor(sf::Color::Black);
+	btn = new Button("Solve", font,50,200);
+	btn2 = new Button("Restart",font,50,400);
 }
 
 void Game::initGame()
@@ -72,6 +73,8 @@ void Game::render()
 
 void Game::renderTextures()
 {
+	//this works like a stack.
+	//we add the textures to a vector and we draw them in order.
 	window->draw(maingame->sprites[bg]);
 	for (int i = 0; i < maingame->sprites.size(); i++)
 	{

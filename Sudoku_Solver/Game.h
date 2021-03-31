@@ -10,6 +10,7 @@ class Game
 {
 	Button *btn;
 	Button *btn2;
+	std::vector<sf::Text> texts;
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
 	GameSprite* maingame = nullptr;
