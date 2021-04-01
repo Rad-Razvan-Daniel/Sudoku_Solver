@@ -68,9 +68,9 @@ void Game::initWindow()
 
 void Game::initFont()
 {
-	font.loadFromFile("font.ttf");
-	//btn = new Button("Solve", font,50,200);
-	//btn2 = new Button("Restart",font,50,400);
+	sf::Font* temp = new sf::Font;
+	temp->loadFromFile("font.ttf");
+	font = temp;
 }
 
 void Game::initGame()
@@ -103,8 +103,7 @@ void Game::renderTextures()
 
 void Game::renderFonts()
 {
-	window->draw(button->sprite);
-	window->draw(button->text);
+	drawbutton(*button);
 	//window->draw(btn->text);
 	//window->draw(btn2->text);
 }
@@ -135,4 +134,10 @@ void Game::updateEvents()
 void Game::update()
 {
 	updateEvents();
+}
+
+void Game::drawbutton(Button button)
+{
+	window->draw(button.sprite);
+	window->draw(button.text);
 }

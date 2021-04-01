@@ -15,7 +15,7 @@ class Game
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
 	int bg;
-	sf::Font font;
+	sf::Font *font;
 
 	void initWindow();
 	void initFont();
@@ -27,6 +27,7 @@ class Game
 	void popSprite();
 	void updateEvents();
 	void update();
+	void drawbutton(Button button);
 
 public:
 	sf::Text text;
