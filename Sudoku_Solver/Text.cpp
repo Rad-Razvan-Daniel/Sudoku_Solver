@@ -6,4 +6,5 @@ Text::Text(std::string str, int x, int y)
 	this->text.setFont(font);
 	this->text.setString(str);
 	this->text.setPosition(x, y);
+	text.setFillColor(sf::Color::Black);
 }

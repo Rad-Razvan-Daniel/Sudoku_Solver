@@ -2,28 +2,21 @@
 #include <fstream>
 #include <vector>
 #include "Table.h"
-#include "GameSprite.h"
+#include "Sprite.h"
 #include "Button.h"
 #include <iostream>
 #include <string>
 class Game
 {
-/*	Button *btn;
-	Button *btn2;*/
 	std::vector<sf::Text> texts;
 	std::vector<sf::Sprite> sprites;
 	std::vector<std::unique_ptr<sf::Texture>> textures;
-
+	Button* button;
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
 	int bg;
 	sf::Font font;
 
-public:
-	sf::Text text;
-	Game();
-	~Game();
-	void runPlease();
 	void initWindow();
 	void initFont();
 	void initGame();
@@ -34,4 +27,10 @@ public:
 	void popSprite();
 	void updateEvents();
 	void update();
+
+public:
+	sf::Text text;
+	Game();
+	~Game();
+	void runPlease();
 };

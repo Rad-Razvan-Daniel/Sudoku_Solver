@@ -1,18 +1,17 @@
 #include "Game.h"
 size_t Game::pushSprite(const std::string& PATH)
 {
-		//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
-		auto texture = std::make_unique<sf::Texture>();
-		texture->loadFromFile("Resources\\Textures\\" + PATH);
-		sf::Sprite sprite;
+	//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
+	auto texture = std::make_unique<sf::Texture>();
+	texture->loadFromFile("Resources\\Textures\\" + PATH);
+	sf::Sprite sprite;
 
-		sprite.setTexture(*texture);
+	sprite.setTexture(*texture);
 
-		sprites.push_back(sprite);
-		textures.push_back(std::move(texture));
+	sprites.push_back(sprite);
+	textures.push_back(std::move(texture));
 
-		return sprites.size();
-	
+	return sprites.size();
 }
 void Game::popSprite()
 {
@@ -20,6 +19,7 @@ void Game::popSprite()
 }
 Game::Game()
 {
+	button = new Button("im a button", "image.jpg", 300, 300);
 
 	initWindow();
 	initGame();
@@ -83,6 +83,7 @@ void Game::initGame()
 
 void Game::render()
 {
+	//remember to add button to the vector of printable stuff before you try to print it
 	window->clear();
 	renderTextures();
 	renderFonts();
@@ -102,6 +103,8 @@ void Game::renderTextures()
 
 void Game::renderFonts()
 {
+	window->draw(button->sprite);
+	window->draw(button->text);
 	//window->draw(btn->text);
 	//window->draw(btn2->text);
 }
