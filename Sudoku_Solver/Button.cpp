@@ -1,11 +1,5 @@
 #include "Button.h"
 
-Button::Button(std::string str, sf::Font font, int x, int y, sf::Color color)
+Button::Button(std::string str,std::string PATH,int x,int y):Text(str,x,y), GameSprite(PATH)
 {
-	this->font = font;
-
-	text.setFont(this->font);
-	text.setFillColor(color);
-	text.setString(str);
-	text.setPosition(x, y);
 }

@@ -1,11 +1,10 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "CustomText.h"
-class Button
+#include "Text.h"
+#include "GameSprite.h"
+class Button : Text, GameSprite
 {
-	sf::Font font;
 public:
-	sf::Text text;
-	Button(std::string str, sf::Font font, int x = 0, int y = 0, sf::Color fontcolor = sf::Color::Black);
+	Button(std::string str,std::string PATH,int x,int y);
 };
 

@@ -1,12 +1,30 @@
 #include "Game.h"
+size_t Game::pushSprite(const std::string& PATH)
+{
+		//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
+		auto texture = std::make_unique<sf::Texture>();
+		texture->loadFromFile("Resources\\Textures\\" + PATH);
+		sf::Sprite sprite;
+
+		sprite.setTexture(*texture);
+
+		sprites.push_back(sprite);
+		textures.push_back(std::move(texture));
+
+		return sprites.size();
+	
+}
+void Game::popSprite()
+{
+	textures.pop_back();
+}
 Game::Game()
 {
 
 	initWindow();
 	initGame();
 	initFont();
-	maingame = new GameSprite;
-	maingame->pushSprite("img.jpg");
+	pushSprite("img.jpg");
 }
 Game::~Game()
 {
@@ -51,8 +69,8 @@ void Game::initWindow()
 void Game::initFont()
 {
 	font.loadFromFile("font.ttf");
-	btn = new Button("Solve", font,50,200);
-	btn2 = new Button("Restart",font,50,400);
+	//btn = new Button("Solve", font,50,200);
+	//btn2 = new Button("Restart",font,50,400);
 }
 
 void Game::initGame()
@@ -75,17 +93,17 @@ void Game::renderTextures()
 {
 	//this works like a stack.
 	//we add the textures to a vector and we draw them in order.
-	window->draw(maingame->sprites[bg]);
-	for (int i = 0; i < maingame->sprites.size(); i++)
+	window->draw(sprites[bg]);
+	for (int i = 0; i < sprites.size(); i++)
 	{
-		window->draw(maingame->sprites[i]);
+		window->draw(sprites[i]);
 	}
 }
 
 void Game::renderFonts()
 {
-	window->draw(btn->text);
-	window->draw(btn2->text);
+	//window->draw(btn->text);
+	//window->draw(btn2->text);
 }
 
 void Game::updateEvents()

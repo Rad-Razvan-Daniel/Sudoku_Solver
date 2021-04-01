@@ -1,19 +1,21 @@
 #pragma once
 #include <fstream>
 #include <vector>
-#include <iostream>
-#include <string>
 #include "Table.h"
 #include "GameSprite.h"
 #include "Button.h"
+#include <iostream>
+#include <string>
 class Game
 {
-	Button *btn;
-	Button *btn2;
+/*	Button *btn;
+	Button *btn2;*/
 	std::vector<sf::Text> texts;
+	std::vector<sf::Sprite> sprites;
+	std::vector<std::unique_ptr<sf::Texture>> textures;
+
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
-	GameSprite* maingame = nullptr;
 	int bg;
 	sf::Font font;
 
@@ -28,6 +30,8 @@ public:
 	void render();
 	void renderTextures();
 	void renderFonts();
+	size_t pushSprite(const std::string& PATH);
+	void popSprite();
 	void updateEvents();
 	void update();
 };
