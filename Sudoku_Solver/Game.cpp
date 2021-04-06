@@ -19,7 +19,8 @@ void Game::popSprite()
 }
 Game::Game()
 {
-	button = new Button("im a button", "image.jpg", 300, 300);
+	solve = new Button("solve", "Resources\\Textures\\image.jpg", 50, 20);
+	play = new Button("play", "Resources\\Textures\\image.jpg", 550, 20);
 
 	initWindow();
 	initGame();
@@ -103,9 +104,8 @@ void Game::renderTextures()
 
 void Game::renderFonts()
 {
-	drawbutton(*button);
-	//window->draw(btn->text);
-	//window->draw(btn2->text);
+	drawbutton(*solve);
+	drawbutton(*play);
 }
 
 void Game::updateEvents()

@@ -11,7 +11,8 @@ class Game
 	std::vector<sf::Text> texts;
 	std::vector<sf::Sprite> sprites;
 	std::vector<std::unique_ptr<sf::Texture>> textures;
-	Button* button;
+	Button* solve;
+	Button* play;
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
 	int bg;
