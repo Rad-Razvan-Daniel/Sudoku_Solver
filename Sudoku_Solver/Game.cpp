@@ -19,8 +19,8 @@ void Game::popSprite()
 }
 Game::Game()
 {
-	solve = new Button("solve", "Resources\\Textures\\image.jpg", 50, 20);
-	play = new Button("play", "Resources\\Textures\\image.jpg", 550, 20);
+	solve = new Button("solve", "image.jpg", 50, 20);
+	play = new Button("play", "image.jpg", 550, 20);
 
 	initWindow();
 	initGame();
