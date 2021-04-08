@@ -1,8 +1,17 @@
 #include "Button.h"
-
-Button::Button(std::string str, std::string PATH, int x, int y) 
-	:Text(str, x, y), ButtonSprite(PATH)
+#include <iostream>
+Button::Button(std::string str,sf::Font *font, std::string PATH, float x, float y,int width, int height)
 {
-	sprite.setPosition(x, y);
-	texture.getSize();
+	sf::Font *tempfont = new sf::Font;
+	font = tempfont;
+	font->loadFromFile("font.ttf");
+	text.setFont(*font); 
+	text.setString(str);
+	text.setPosition(x+(90-str.length()*12)  , y+20);
+	button.setSize(sf::Vector2f(width, height));
+	text.setFillColor(sf::Color::Black);
+
+	texture.loadFromFile("Resources\\Textures\\" + PATH);
+	button.setTexture(&texture);
+	button.setPosition(x,y);
 }

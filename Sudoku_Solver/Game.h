@@ -23,15 +23,15 @@ class Game
 	void initGame();
 	void render();
 	void renderTextures();
-	void renderFonts();
+	void renderMisc();
 	size_t pushSprite(const std::string& PATH);
 	void popSprite();
 	void updateEvents();
 	void update();
 	void drawbutton(Button button);
+	bool isButtonHover(sf::FloatRect sprite, sf::Vector2f xy);
 
 public:
-	sf::Text text;
 	Game();
 	~Game();
 	void runPlease();

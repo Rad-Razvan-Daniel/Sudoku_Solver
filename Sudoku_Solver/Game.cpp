@@ -19,11 +19,8 @@ void Game::popSprite()
 }
 Game::Game()
 {
-	solve = new Button("solve", "image.jpg", 50, 20);
-	play = new Button("play", "image.jpg", 550, 20);
-
 	initWindow();
-	initGame();
+	initGame(); //Table, Button, Button
 	initFont();
 	pushSprite("img.jpg");
 }
@@ -70,13 +67,16 @@ void Game::initWindow()
 void Game::initFont()
 {
 	sf::Font* temp = new sf::Font;
-	temp->loadFromFile("font.ttf");
+	temp->loadFromFile("font.ttf"); /*TODO add		Resources\\Fonts\\		before path*/ 
 	font = temp;
 }
 
 void Game::initGame()
 {
 	Table table;
+	//				string, font, path, x,y, width, height, fontcol
+	solve = new Button("solve", font, "image.jpg", 300, 50, 180,80);
+	play = new Button("play", font, "image.jpg", 100, 50,180,80);
 	//table.printTable();
 	//std::cout << table.solve() << std::endl;
 	//table.printTable();
@@ -86,8 +86,10 @@ void Game::render()
 {
 	//remember to add button to the vector of printable stuff before you try to print it
 	window->clear();
+
 	renderTextures();
-	renderFonts();
+	renderMisc();
+
 	window->display();
 }
 
@@ -102,9 +104,10 @@ void Game::renderTextures()
 	}
 }
 
-void Game::renderFonts()
+void Game::renderMisc()
 {
 	drawbutton(*solve);
+	 
 	drawbutton(*play);
 }
 
@@ -138,6 +141,15 @@ void Game::update()
 
 void Game::drawbutton(Button button)
 {
-	window->draw(button.sprite);
+	
+	window->draw(button.button);
 	window->draw(button.text);
+}
+
+bool Game::isButtonHover(sf::FloatRect sprite, sf::Vector2f xy)
+{
+	if (sprite.contains(xy))	
+		return true;
+
+	return false;
 }

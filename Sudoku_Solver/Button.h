@@ -1,12 +1,18 @@
 #pragma once
 #include "Text.h"
 #include "ButtonSprite.h"
-class Button :
-	public Text, public ButtonSprite
+#include <string>
+class Button
 {
+
 	//the PATH will be <<image.jpg>>.  Resources\\Textures\\ will be added. 
 	// i did this because I want to load in inactive_texture and we can't do that
 	//unless we load the path after we add the identifier before the texture
+	sf::Texture texture;
+	sf::Font *font = NULL;
+	
 public:
-	Button(std::string str, std::string PATH, int x, int y);
+	Button(std::string str, sf::Font* font, std::string PATH, float x, float y,int width, int height);
+	sf::Text text;
+	sf::RectangleShape button;
 };
