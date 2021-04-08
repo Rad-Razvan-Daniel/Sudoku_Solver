@@ -20,8 +20,9 @@ void Game::popSprite()
 Game::Game()
 {
 	initWindow();
+	initMisc(); //Font, Textures
 	initGame(); //Table, Button, Button
-	initFont();
+
 	pushSprite("img.jpg");
 }
 Game::~Game()
@@ -64,19 +65,31 @@ void Game::initWindow()
 	window->setVerticalSyncEnabled(vsync);
 }
 
-void Game::initFont()
+void Game::initMisc()
 {
 	sf::Font* temp = new sf::Font;
+	sf::Texture* tempTexture = new sf::Texture;
+	sf::Texture* tempHoverTexture = new sf::Texture;
+	sf::Texture* tempActiveTexture = new sf::Texture;
+
 	temp->loadFromFile("font.ttf"); /*TODO add		Resources\\Fonts\\		before path*/ 
+	tempTexture->loadFromFile("Resources\\Textures\\image.jpg");
+	tempHoverTexture->loadFromFile("Resources\\Textures\\hover_image.jpg");
+	tempActiveTexture->loadFromFile("Resources\\Textures\\active_image.jpg");
+
 	font = temp;
+	def = tempTexture;
+	hover = tempHoverTexture;
+	active= tempActiveTexture;
 }
 
 void Game::initGame()
 {
 	Table table;
 	//				string, font, path, x,y, width, height, fontcol
-	solve = new Button("solve", font, "image.jpg", 300, 50, 180,80);
-	play = new Button("play", font, "image.jpg", 100, 50,180,80);
+	//remember to make the buttons as part of a matrix made out of buttons, and whenever you render, make a for() and check for every button, if anything changed
+	solve = new Button("solve", font,def,hover,active, 300, 50, 180,80);
+	play = new Button("play", font, def,hover,active, 100, 50,180,80);
 	//table.printTable();
 	//std::cout << table.solve() << std::endl;
 	//table.printTable();

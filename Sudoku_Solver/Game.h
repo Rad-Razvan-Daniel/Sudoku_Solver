@@ -8,18 +8,26 @@
 #include <string>
 class Game
 {
-	std::vector<sf::Text> texts;
-	std::vector<sf::Sprite> sprites;
-	std::vector<std::unique_ptr<sf::Texture>> textures;
-	Button* solve;
-	Button* play;
+//GAME
 	sf::RenderWindow* window = nullptr;
 	sf::Event event;
 	int bg;
-	sf::Font *font;
+	//RENDERING
+	std::vector<sf::Text> texts;
+	std::vector<sf::Sprite> sprites;
+	std::vector<std::unique_ptr<sf::Texture>> textures;
+	sf::Font* font;
+//BUTTONS
+	Button* solve;
+	Button* play;
+	//BUTTON GRAPHICS SPECIFIC
+	sf::Texture* def;
+	sf::Texture* hover;
+	sf::Texture* active;
+
 
 	void initWindow();
-	void initFont();
+	void initMisc();
 	void initGame();
 	void render();
 	void renderTextures();
