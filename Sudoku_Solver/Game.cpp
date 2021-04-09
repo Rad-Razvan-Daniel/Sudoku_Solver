@@ -95,7 +95,7 @@ void Game::initUI()
 		buttons.push_back(x);
 		for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
 		{
-			Button* btn = new Button("nr", font, box, hover_box, active_box,  xoffset, 105 + yoffset, 50, 50);
+			Button* btn = new Button(std::to_string(table.table[j][i]), font, box, hover_box, active_box,  xoffset, 105 + yoffset, 50, 50);
 			buttons[j].push_back(*btn);
 		}
 	}
@@ -125,7 +125,7 @@ void Game::render()
 void Game::renderTextures()
 {
 	//this works like a stack.
-	//we add the textures to a vector and we draw them in order.
+	//we add the textures to a vector and we draw them from front to back
 	window->draw(sprites[bg]);
 	for (int i = 0; i < sprites.size(); i++)
 	{
@@ -149,8 +149,7 @@ void Game::renderMisc()
 
 void Game::updateEvents()
 {
-
-	mousePos = sf::Mouse::getPosition();
+	
 	while (window->pollEvent(event))
 	{
 		switch (event.type)
@@ -162,7 +161,12 @@ void Game::updateEvents()
 
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape)
-				window->close();	break;
+				window->close();	
+			break;
+
+		case sf::Event::MouseMoved:
+			mousePos = sf::Mouse::getPosition(*window);
+			break;
 
 		default:
 			break;
@@ -197,11 +201,10 @@ void Game::updateButton(Button* button)
 {
 	if (button->buttonbounds.contains(mousePos))
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			std::cout << "State 2 \n";
 			button->state = 2;
-
 		}
 		else
 		{

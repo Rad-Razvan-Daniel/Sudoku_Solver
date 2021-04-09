@@ -9,7 +9,7 @@
 class Game
 {
 //GAME
-	sf::RenderWindow* window = nullptr;
+
 	sf::Event event;
 	int bg;
 	//RENDERING
@@ -50,6 +50,7 @@ class Game
 	void initTable();
 	sf::Texture* makeTexture(std::string PATH);
 public:
+	sf::RenderWindow* window = nullptr;
 	void mainLoop();
 	Game();
 	~Game();
