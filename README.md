@@ -1,7 +1,7 @@
 # Sudoku_Solver
 This project is made entirely in c++.
-I use SFML for rendering, some of the event handling and manipulating textures and sprites. 
+I use SFML for the visual elements. 
 All the code was made by me, dating the start of my GitHub activity. 
 
-The solving algorithm I used is backtracking, and I plan on implementing Stochastic search.
-Right now it's incomplete but I plan on making a user interface and generating a random sudoku each time the game is launched. 
+The solving algorithm I used is backtracking. I also plan on implementing Stochastic search.
+Right now I am working on making the game actually playable, but every time I commit, the application should be usable.
