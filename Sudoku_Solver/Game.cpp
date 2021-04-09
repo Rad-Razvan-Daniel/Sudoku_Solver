@@ -34,7 +34,8 @@ void Game::runPlease()
 {
 	while (window->isOpen())
 	{
-		update();
+		int state = 2;
+		update(state);
 		render();
 	}
 }
@@ -68,28 +69,28 @@ void Game::initWindow()
 void Game::initMisc()
 {
 	sf::Font* temp = new sf::Font;
-	sf::Texture* tempTexture = new sf::Texture;
-	sf::Texture* tempHoverTexture = new sf::Texture;
-	sf::Texture* tempActiveTexture = new sf::Texture;
+	sf::Texture* tTexture = new sf::Texture;
+	sf::Texture* tHover = new sf::Texture;
+	sf::Texture* tActive = new sf::Texture;
 
 	temp->loadFromFile("font.ttf"); /*TODO add		Resources\\Fonts\\		before path*/ 
-	tempTexture->loadFromFile("Resources\\Textures\\image.jpg");
-	tempHoverTexture->loadFromFile("Resources\\Textures\\hover_image.jpg");
-	tempActiveTexture->loadFromFile("Resources\\Textures\\active_image.jpg");
+	tTexture->loadFromFile("Resources\\Textures\\image.jpg");
+	tHover->loadFromFile("Resources\\Textures\\hover_image.jpg");
+	tActive->loadFromFile("Resources\\Textures\\active_image.jpg");
 
 	font = temp;
-	def = tempTexture;
-	hover = tempHoverTexture;
-	active= tempActiveTexture;
+	def = tTexture;
+	hover = tHover;
+	active= tActive;
 }
 
 void Game::initGame()
 {
 	Table table;
-	//				string, font, path, x,y, width, height, fontcol
 	//remember to make the buttons as part of a matrix made out of buttons, and whenever you render, make a for() and check for every button, if anything changed
-	solve = new Button("solve", font,def,hover,active, 300, 50, 180,80);
-	play = new Button("play", font, def,hover,active, 100, 50,180,80);
+				//		string, font,path,path,path   x     y, width, height
+	solve = new Button("solve", font,def,hover,active, 300, 50, 180,  80);
+	play = new Button("play", font, def,hover,active, 100, 50,  180,  80);
 	//table.printTable();
 	//std::cout << table.solve() << std::endl;
 	//table.printTable();
@@ -119,9 +120,9 @@ void Game::renderTextures()
 
 void Game::renderMisc()
 {
-	drawbutton(*solve);
+	drawButton(*solve);
 	 
-	drawbutton(*play);
+	drawButton(*play);
 }
 
 void Game::updateEvents()
@@ -132,14 +133,18 @@ void Game::updateEvents()
 		{
 		case sf::Event::Closed:
 			window->close();
+			//std::cout << "no\n";
 			break;
 
 			// key pressed
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape)
 				window->close();
+			
+			else if (event.key.code == sf::Keyboard::P) {
+				std::cout << "temp";
+			}
 			break;
-
 			// we don't process other types of events
 		default:
 			break;
@@ -147,21 +152,30 @@ void Game::updateEvents()
 	}
 }
 
-void Game::update()
+void Game::update(int state)
 {
 	updateEvents();
+	updateButton(*play,state);
 }
 
-void Game::drawbutton(Button button)
+void Game::drawButton(Button button)
 {
-	
 	window->draw(button.button);
 	window->draw(button.text);
 }
 
-bool Game::isButtonHover(sf::FloatRect sprite, sf::Vector2f xy)
+void Game::updateButton(Button button, int state)
 {
-	if (sprite.contains(xy))	
+	button.updateTexture(state);
+	sf::Vector2i v2i = sf::Mouse::getPosition();
+	std::cout << v2i.x << "  " << v2i.y << std::endl;
+	play->temp(v2i);
+	solve->temp(v2i);
+}
+
+bool Game::isButtonHover(Button button, sf::Vector2f xy)
+{
+	//if (button.button)	
 		return true;
 
 	return false;

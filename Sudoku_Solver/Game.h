@@ -35,9 +35,10 @@ class Game
 	size_t pushSprite(const std::string& PATH);
 	void popSprite();
 	void updateEvents();
-	void update();
-	void drawbutton(Button button);
-	bool isButtonHover(sf::FloatRect sprite, sf::Vector2f xy);
+	void update(int state);
+	void drawButton(Button button);
+	void updateButton(Button button, int state);
+	bool isButtonHover(Button button, sf::Vector2f xy);
 
 public:
 	Game();

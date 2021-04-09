@@ -20,4 +20,30 @@ Button::Button(std::string str,sf::Font *font, sf::Texture* def, sf::Texture* ho
 	button.setSize(sf::Vector2f(width, height));
 	button.setTexture(texture);
 	button.setPosition(x,y);
+
+}
+void Button::temp(sf::Vector2i v2i)
+{
+	sf::IntRect buttonbounds(button.getGlobalBounds());
+	
+	if (buttonbounds.contains(v2i))
+	{
+		std::cout << "intersection";
+		button.setTexture(hover_texture);
+	}
+	else
+		button.setTexture(texture);
+}
+void Button::updateTexture(int state)
+{
+	switch (state)
+	{
+	case 1: // hover
+		button.setTexture(hover_texture, true);
+		break;
+	case 2: //active
+		//std::cout << "active";
+		//button.setTexture(hover_texture, true);
+		break;
+	}
 }
