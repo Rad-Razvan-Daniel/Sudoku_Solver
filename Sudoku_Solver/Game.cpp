@@ -90,21 +90,15 @@ void Game::initUI()
 	play = new Button("play", font, def,hover,active, 100, 20,  180,  80);
 	std::vector<Button> x;
 
-	
-	for (int j = 0, xoffset = 0, yoffset = 0; j < 9; j++,yoffset+=(j%3 ==0 && j!=0)?55:50) //column iter
+	for (int j = 0, yoffset = 0, xoffset = 50;j < 9;		 j++, yoffset+=(j%3==0 && j!=0) ? 55:50, xoffset = 50) //column iter
 	{
 		buttons.push_back(x);
-		for (int i = 0; i < 9; i++, xoffset += 50) // row iter
+		for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
 		{
-			Button* btn = new Button("nr", font, box, hover_box, active_box, ((i%3==2)? 50: 55) +xoffset, 100 + yoffset, 50, 50);
-			std::cout << i << " " << j << std::endl;
+			Button* btn = new Button("nr", font, box, hover_box, active_box,  xoffset, 105 + yoffset, 50, 50);
 			buttons[j].push_back(*btn);
 		}
-		xoffset = 0;
 	}
-	//table.printTable();
-	//std::cout << table.solve() << std::endl;
-	//table.printTable();
 }
 void Game::initTable()
 {
@@ -201,8 +195,6 @@ void Game::drawButton(Button button)
 
 void Game::updateButton(Button* button)
 {
-	std::cout << std::endl << button->buttonbounds.left << "|" << button->buttonbounds.top << "|" << button->buttonbounds.height << "|" << button->buttonbounds.width << "|";
-
 	if (button->buttonbounds.contains(mousePos))
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
