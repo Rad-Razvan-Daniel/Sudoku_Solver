@@ -20,27 +20,38 @@ class Game
 //BUTTONS
 	Button* solve;
 	Button* play;
+	std::vector<Button> buttons;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
 	sf::Texture* hover;
 	sf::Texture* active;
+	sf::Texture* box;
+	sf::Texture* hover_box;
+	sf::Texture* active_box;
 
+	sf::Vector2i mousePos;
 	void initWindow();
 	void initMisc();
-	void initGame();
+	void initUI();
+
 	void render();
 	void renderTextures();
 	void renderMisc();
+
 	size_t pushSprite(const std::string& PATH);
 	void popSprite();
-	void updateEvents();
+
 	void update();
+	void updateEvents();
+
+
 	void drawButton(Button button);
 	void updateButton(Button* button);
-	bool isButtonHover(Button button, sf::Vector2f xy);
-
+	void initTable();
+	sf::Texture* makeTexture(std::string PATH);
 public:
+	void mainLoop();
 	Game();
 	~Game();
-	void runPlease();
+	
 };

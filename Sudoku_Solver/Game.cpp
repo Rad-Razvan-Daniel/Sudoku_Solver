@@ -21,16 +21,18 @@ Game::Game()
 {
 	initWindow();
 	initMisc(); //Font, Textures
-	initGame(); //Table, Button, Button
+	initTable(); //back end algorithm
+	initUI(); //Table, Buttons
 
-	pushSprite("img.jpg");
+	//used for rendering background
+	pushSprite("background.jpg");
 }
 Game::~Game()
 {
 	delete window;
 }
 
-void Game::runPlease()
+void Game::mainLoop()
 {
 	while (window->isOpen())
 	{
@@ -67,43 +69,52 @@ void Game::initWindow()
 
 void Game::initMisc()
 {
+	
 	sf::Font* temp = new sf::Font;
-	sf::Texture* tTexture = new sf::Texture;
-	sf::Texture* tHover = new sf::Texture;
-	sf::Texture* tActive = new sf::Texture;
-
-	temp->loadFromFile("font.ttf"); /*TODO add		Resources\\Fonts\\		before path*/ 
-	tTexture->loadFromFile("Resources\\Textures\\image.jpg");
-	tHover->loadFromFile("Resources\\Textures\\hover_image.jpg");
-	tActive->loadFromFile("Resources\\Textures\\active_image.jpg");
+	temp->loadFromFile("Resources\\font.ttf");
 
 	font = temp;
-	def = tTexture;
-	hover = tHover;
-	active= tActive;
-}
+	def = makeTexture("image.jpg");
+	hover = makeTexture("hover_image.jpg");
+	active = makeTexture("active_image.jpg");
+	box = makeTexture("box.jpg"); 
+	active_box = makeTexture("active_box.jpg"); 
+	hover_box = makeTexture("hover_box.jpg"); 
+} 
 
-void Game::initGame()
+void Game::initUI()
 {
 	Table table;
-	//remember to make the buttons as part of a matrix made out of buttons, and whenever you render, make a for() and check for every button, if anything changed
-				//		string, font,path,path,path   x     y, width, height
-	solve = new Button("solve", font,def,hover,active, 300, 50, 180,  80);
+				//		string, font,path,path,  path    x  y, width, height
+	solve =  new Button("solve", font,def,hover,active, 300, 50, 180,  80);
 	play = new Button("play", font, def,hover,active, 100, 50,  180,  80);
+	for (int i = 0; i < 9; i++)
+	{
+		Button* btn = new Button("nr", font, box, hover_box, active_box, 50 + 60*i, 150 + i, 50, 50);
+		buttons.push_back(*btn);
+	}
 	//table.printTable();
 	//std::cout << table.solve() << std::endl;
 	//table.printTable();
 }
+void Game::initTable()
+{
 
+}
+sf::Texture* Game::makeTexture(std::string PATH)
+{
+	sf::Texture* temp = new sf::Texture;
+	temp->loadFromFile("Resources\\Textures\\" + PATH);
+	return temp;
+}
 void Game::render()
 {
 	//remember to add button to the vector of printable stuff before you try to print it
 	window->clear();
-
+	//draws everything except interractables.
 	renderTextures();
-	//renderMisc();
-	drawButton(*solve);
-	drawButton(*play);
+	//draws buttons
+	renderMisc();
 
 	window->display();
 }
@@ -121,34 +132,33 @@ void Game::renderTextures()
 
 void Game::renderMisc()
 {
-
+	drawButton(*solve);
+	drawButton(*play);
+	for (int i = 0; i < buttons.size(); i++)
+	{
+		drawButton(buttons[i]);
+	}
 }
 
 void Game::updateEvents()
 {
+
+	mousePos = sf::Mouse::getPosition();
 	while (window->pollEvent(event))
 	{
 		switch (event.type)
 		{
-		case sf::Event::Closed:
-			window->close();
-			break;
 
-			// key pressed
+		case sf::Event::Closed:
+			window->close();	break;
+
+
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape)
-				window->close();
-			
-			else if (event.key.code == sf::Keyboard::P)
-			{
+				window->close();	break;
 
-			}
 		default:
 			break;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-		{
-		//sf::Vector2i v2i = sf::Mouse::getPosition();
 		}
 		
 	}
@@ -160,6 +170,10 @@ void Game::update()
 	updateEvents();
 	updateButton(play);
 	updateButton(solve);
+	for (int i = 0; i < buttons.size(); i++)
+	{
+		updateButton(&buttons[i]);
+	}
 }
 
 void Game::drawButton(Button button)
@@ -170,22 +184,19 @@ void Game::drawButton(Button button)
 
 void Game::updateButton(Button* button)
 {
-	sf::Vector2i v2i = sf::Mouse::getPosition();
-	//std::cout << v2i.x << "  " << v2i.y << std::endl;
-	//button->temp(v2i);
-	std::cout << "bounds:\n" << button->buttonbounds.left << "  " << button->buttonbounds.top;
+	std::cout << std::endl << button->buttonbounds.left << "|" << button->buttonbounds.top << "|" << button->buttonbounds.height << "|" << button->buttonbounds.width << "|";
 
-	if (button->buttonbounds.contains(v2i))
+	if (button->buttonbounds.contains(mousePos))
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
 		{
-			std::cout << "2";
+			std::cout << "State 2 \n";
 			button->state = 2;
 
 		}
 		else
 		{
-			std::cout << "1";
+			std::cout << "State 1 \n";
 			button->state = 1;
 		}
 	}

@@ -16,7 +16,7 @@ public:
 	sf::Texture* hover_texture = NULL;
 	sf::Texture* active_texture = NULL;
 	Button(std::string str, sf::Font* font,sf::Texture* def,sf::Texture* hover, sf::Texture* active, float x, float y,int width, int height);
-	void temp(sf::Vector2i);
+
 	sf::Text text;
 	sf::RectangleShape button;
 	int state = 0;
