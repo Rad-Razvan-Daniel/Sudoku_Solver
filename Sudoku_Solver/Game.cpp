@@ -88,10 +88,17 @@ void Game::initUI()
 				//		string, font,path,path,  path    x  y, width, height
 	solve =  new Button("solve", font,def,hover,active, 300, 50, 180,  80);
 	play = new Button("play", font, def,hover,active, 100, 50,  180,  80);
-	for (int i = 0; i < 9; i++)
+	std::vector<Button> x;
+
+	for (int j = 0; j < 9; j++) //column iter
 	{
-		Button* btn = new Button("nr", font, box, hover_box, active_box, 50 + 60*i, 150 + i, 50, 50);
-		buttons.push_back(*btn);
+		buttons.push_back(x);
+		for (int i = 0; i < 9; i++) // row iter
+		{
+			Button* btn = new Button("nr", font, box, hover_box, active_box, 50 + 60 * i, 150 + i, 50, 50);
+			std::cout << i << " " << j << std::endl;
+			buttons[j].push_back(*btn);
+		}
 	}
 	//table.printTable();
 	//std::cout << table.solve() << std::endl;
@@ -134,9 +141,13 @@ void Game::renderMisc()
 {
 	drawButton(*solve);
 	drawButton(*play);
-	for (int i = 0; i < buttons.size(); i++)
+
+	for (int j = 0; j < 9; j++) //column iter
 	{
-		drawButton(buttons[i]);
+		for (int i = 0; i < 9; i++)
+		{
+			drawButton(buttons[j][i]);
+		}
 	}
 }
 
@@ -170,9 +181,13 @@ void Game::update()
 	updateEvents();
 	updateButton(play);
 	updateButton(solve);
-	for (int i = 0; i < buttons.size(); i++)
+
+	for (int j = 0; j < 9; j++) //column iter
 	{
-		updateButton(&buttons[i]);
+		for (int i = 0; i < 9; i++)
+		{
+			updateButton(&buttons[j][i]);
+		}
 	}
 }
 

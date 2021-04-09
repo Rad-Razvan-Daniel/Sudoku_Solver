@@ -9,7 +9,14 @@ Button::Button(std::string str,sf::Font *font, sf::Texture* def, sf::Texture* ho
 	text.setFont(*font); 
 	text.setString(str);
 	//TODO: center the text within the box using the getGlobalPosition
-	text.setPosition(x+(90-str.length()*12)  , y+20);
+	//we move the text by x to the right, to accomodate for the offset
+	// 
+	//we estmate the text length. we substract that from the total length.  
+	if (def->getSize().x > 100)
+	{
+		text.setPosition(x + str.length() * 10, y + 20);
+	}
+	else text.setPosition(x + 10, y + 10);
 	text.setFillColor(sf::Color::Black);
 
 	
