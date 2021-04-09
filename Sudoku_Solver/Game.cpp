@@ -34,8 +34,7 @@ void Game::runPlease()
 {
 	while (window->isOpen())
 	{
-		int state = 2;
-		update(state);
+		update();
 		render();
 	}
 }
@@ -102,7 +101,9 @@ void Game::render()
 	window->clear();
 
 	renderTextures();
-	renderMisc();
+	//renderMisc();
+	drawButton(*solve);
+	drawButton(*play);
 
 	window->display();
 }
@@ -120,9 +121,7 @@ void Game::renderTextures()
 
 void Game::renderMisc()
 {
-	drawButton(*solve);
-	 
-	drawButton(*play);
+
 }
 
 void Game::updateEvents()
@@ -133,7 +132,6 @@ void Game::updateEvents()
 		{
 		case sf::Event::Closed:
 			window->close();
-			//std::cout << "no\n";
 			break;
 
 			// key pressed
@@ -141,21 +139,27 @@ void Game::updateEvents()
 			if (event.key.code == sf::Keyboard::Escape)
 				window->close();
 			
-			else if (event.key.code == sf::Keyboard::P) {
-				std::cout << "temp";
+			else if (event.key.code == sf::Keyboard::P)
+			{
+
 			}
-			break;
-			// we don't process other types of events
 		default:
 			break;
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		{
+		//sf::Vector2i v2i = sf::Mouse::getPosition();
+		}
+		
 	}
+	
 }
 
-void Game::update(int state)
+void Game::update()
 {
 	updateEvents();
-	updateButton(*play,state);
+	updateButton(play);
+	updateButton(solve);
 }
 
 void Game::drawButton(Button button)
@@ -164,19 +168,27 @@ void Game::drawButton(Button button)
 	window->draw(button.text);
 }
 
-void Game::updateButton(Button button, int state)
+void Game::updateButton(Button* button)
 {
-	button.updateTexture(state);
 	sf::Vector2i v2i = sf::Mouse::getPosition();
-	std::cout << v2i.x << "  " << v2i.y << std::endl;
-	play->temp(v2i);
-	solve->temp(v2i);
-}
+	//std::cout << v2i.x << "  " << v2i.y << std::endl;
+	//button->temp(v2i);
+	std::cout << "bounds:\n" << button->buttonbounds.left << "  " << button->buttonbounds.top;
 
-bool Game::isButtonHover(Button button, sf::Vector2f xy)
-{
-	//if (button.button)	
-		return true;
+	if (button->buttonbounds.contains(v2i))
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+		{
+			std::cout << "2";
+			button->state = 2;
 
-	return false;
+		}
+		else
+		{
+			std::cout << "1";
+			button->state = 1;
+		}
+	}
+	else button->state = 0;
+	button->updateTexture();
 }

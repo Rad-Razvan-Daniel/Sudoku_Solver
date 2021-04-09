@@ -25,7 +25,6 @@ class Game
 	sf::Texture* hover;
 	sf::Texture* active;
 
-
 	void initWindow();
 	void initMisc();
 	void initGame();
@@ -35,9 +34,9 @@ class Game
 	size_t pushSprite(const std::string& PATH);
 	void popSprite();
 	void updateEvents();
-	void update(int state);
+	void update();
 	void drawButton(Button button);
-	void updateButton(Button button, int state);
+	void updateButton(Button* button);
 	bool isButtonHover(Button button, sf::Vector2f xy);
 
 public:

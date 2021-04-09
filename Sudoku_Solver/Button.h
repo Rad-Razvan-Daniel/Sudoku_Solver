@@ -19,6 +19,7 @@ public:
 	void temp(sf::Vector2i);
 	sf::Text text;
 	sf::RectangleShape button;
-
-	void updateTexture(int state);
+	int state = 0;
+	sf::IntRect buttonbounds;
+	void updateTexture();
 };
