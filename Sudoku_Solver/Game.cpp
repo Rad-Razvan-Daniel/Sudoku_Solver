@@ -84,7 +84,7 @@ void Game::initMisc()
 
 void Game::initUI()
 {
-	Table table;
+	Table sudoku;
 				//		string, font,path,path,  path    x  y, width, height
 	solve =  new Button("solve", font,def,hover,active, 300, 20, 180,  80);
 	play = new Button("play", font, def,hover,active, 100, 20,  180,  80);
@@ -95,7 +95,7 @@ void Game::initUI()
 		buttons.push_back(x);
 		for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
 		{
-			Button* btn = new Button(std::to_string(table.table[j][i]), font, box, hover_box, active_box,  xoffset, 105 + yoffset, 50, 50);
+			Button* btn = new Button((std::to_string(sudoku.table[j][i])=="0") ? "":std::to_string(sudoku.table[j][i]) , font, box, hover_box, active_box,  xoffset, 105 + yoffset, 50, 50);
 			buttons[j].push_back(*btn);
 		}
 	}
