@@ -86,19 +86,21 @@ void Game::initUI()
 {
 	Table table;
 				//		string, font,path,path,  path    x  y, width, height
-	solve =  new Button("solve", font,def,hover,active, 300, 50, 180,  80);
-	play = new Button("play", font, def,hover,active, 100, 50,  180,  80);
+	solve =  new Button("solve", font,def,hover,active, 300, 20, 180,  80);
+	play = new Button("play", font, def,hover,active, 100, 20,  180,  80);
 	std::vector<Button> x;
 
-	for (int j = 0; j < 9; j++) //column iter
+	
+	for (int j = 0, xoffset = 0, yoffset = 0; j < 9; j++,yoffset+=(j%3 ==0 && j!=0)?55:50) //column iter
 	{
 		buttons.push_back(x);
-		for (int i = 0; i < 9; i++) // row iter
+		for (int i = 0; i < 9; i++, xoffset += 50) // row iter
 		{
-			Button* btn = new Button("nr", font, box, hover_box, active_box, 50 + 60 * i, 150 + i, 50, 50);
+			Button* btn = new Button("nr", font, box, hover_box, active_box, ((i%3==2)? 50: 55) +xoffset, 100 + yoffset, 50, 50);
 			std::cout << i << " " << j << std::endl;
 			buttons[j].push_back(*btn);
 		}
+		xoffset = 0;
 	}
 	//table.printTable();
 	//std::cout << table.solve() << std::endl;
