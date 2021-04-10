@@ -2,7 +2,6 @@
 #include <iostream>
 class Table
 {
-	bool isValid(const int line, const int column, const int val);
 	void initTable();
 public:
 	int table[9][9] = { { 3, 0, 6, 5, 0, 8, 4, 0, 0 },
@@ -15,9 +14,10 @@ public:
 					   { 0, 0, 0, 0, 0, 0, 0, 7, 4 },
 					   { 0, 0, 5, 2, 0, 6, 3, 0, 0 } };
 
-
 	Table();
 	~Table();
 	void printTable();
-	bool solve(int line = 0, int column = 0);
+
+	bool isValid(const int line, const int column, const int val);
+	bool consoleSolve(int line = 0, int column = 0);
 };

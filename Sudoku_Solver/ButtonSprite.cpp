@@ -1,7 +1,6 @@
 #include "ButtonSprite.h"
 ButtonSprite::ButtonSprite(std::string PATH)
 {
-
 	activeTexture.loadFromFile("Resources\\Textures\\active_" + PATH);
 	hoverTexture.loadFromFile("Resources\\Textures\\hover_" + PATH);
 

@@ -1,8 +1,7 @@
 #include "Game.h"
 size_t Game::pushSprite(const std::string& PATH)
 {
-	//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
-	auto texture = std::make_unique<sf::Texture>();
+	auto texture = std::make_unique<sf::Texture>();				//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
 	texture->loadFromFile("Resources\\Textures\\" + PATH);
 	sf::Sprite sprite;
 
@@ -69,7 +68,6 @@ void Game::initWindow()
 
 void Game::initMisc()
 {
-	
 	sf::Font* temp = new sf::Font;
 	temp->loadFromFile("Resources\\font.ttf");
 
@@ -77,38 +75,40 @@ void Game::initMisc()
 	def = makeTexture("image.jpg");
 	hover = makeTexture("hover_image.jpg");
 	active = makeTexture("active_image.jpg");
-	box = makeTexture("box.jpg"); 
-	active_box = makeTexture("active_box.jpg"); 
-	hover_box = makeTexture("hover_box.jpg"); 
-} 
+	box = makeTexture("box.jpg");
+	active_box = makeTexture("active_box.jpg");
+	hover_box = makeTexture("hover_box.jpg");
+}
 
 void Game::initUI()
 {
 	Table sudoku;
-				//		string, font,path,path,  path    x  y, width, height
-	solve =  new Button("solve", font,def,hover,active, 300, 20, 180,  80);
-	play = new Button("play", font, def,hover,active, 100, 20,  180,  80);
+	//		string, font,path,path,  path    x  y, width, height
+	solve = new Button("solve", font, def, hover, active, 300, 20, 180, 80);
+	play = new Button("play", font, def, hover, active, 100, 20, 180, 80);
 	std::vector<Button> x;
 
-	for (int j = 0, yoffset = 0, xoffset = 50;j < 9;		 j++, yoffset+=(j%3==0 && j!=0) ? 55:50, xoffset = 50) //column iter
+	for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //column iter
 	{
 		buttons.push_back(x);
 		for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
 		{
-			Button* btn = new Button((std::to_string(sudoku.table[j][i])=="0") ? "":std::to_string(sudoku.table[j][i]) , font, box, hover_box, active_box,  xoffset, 105 + yoffset, 50, 50);
+			Button* btn = new Button((std::to_string(sudoku.table[j][i]) == "0") ? "" : std::to_string(sudoku.table[j][i]), font, box, hover_box, active_box, xoffset, 105 + yoffset, 50, 50);
 			buttons[j].push_back(*btn);
 		}
 	}
 }
 void Game::initTable()
 {
-
 }
 sf::Texture* Game::makeTexture(std::string PATH)
 {
 	sf::Texture* temp = new sf::Texture;
 	temp->loadFromFile("Resources\\Textures\\" + PATH);
 	return temp;
+}
+void Game::solvingAlgorithm()
+{
 }
 void Game::render()
 {
@@ -149,19 +149,16 @@ void Game::renderMisc()
 
 void Game::updateEvents()
 {
-	
 	while (window->pollEvent(event))
 	{
 		switch (event.type)
 		{
-
 		case sf::Event::Closed:
 			window->close();	break;
 
-
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape)
-				window->close();	
+				window->close();
 			break;
 
 		case sf::Event::MouseMoved:
@@ -171,9 +168,7 @@ void Game::updateEvents()
 		default:
 			break;
 		}
-		
 	}
-	
 }
 
 void Game::update()

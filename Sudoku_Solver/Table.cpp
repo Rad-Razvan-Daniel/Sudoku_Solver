@@ -20,7 +20,7 @@ void Table::printTable()
 	}
 }
 
-bool Table::solve(int line, int column)
+bool Table::consoleSolve(int line, int column)
 {
 	if (line == 8 && column == 9)
 		return true;
@@ -30,7 +30,7 @@ bool Table::solve(int line, int column)
 		column = 0;
 	}
 	if (table[line][column] != 0)
-		return solve(line, column + 1);
+		return consoleSolve(line, column + 1);
 
 	for (int nr = 1; nr < 10; nr++)
 	{
@@ -38,7 +38,7 @@ bool Table::solve(int line, int column)
 		if (isValid(line, column, nr))
 		{
 			table[line][column] = nr;
-			if (solve(line, column))
+			if (consoleSolve(line, column))
 				return true;
 		}
 		//if we got here, n was wrong, meaning we should make this position the initial value; 0

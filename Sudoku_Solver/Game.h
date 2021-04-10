@@ -8,16 +8,31 @@
 #include <string>
 class Game
 {
-//GAME
+	//GAME
+	void initWindow();
+	void initMisc();
+	void initUI();
+	void initTable();
+	//LOGIC
 
+	void update();
+	void updateEvents();
 	sf::Event event;
-	int bg;
+
 	//RENDERING
+	int bg;
 	std::vector<sf::Text> texts;
 	std::vector<sf::Sprite> sprites;
 	std::vector<std::unique_ptr<sf::Texture>> textures;
 	sf::Font* font;
-//BUTTONS
+	size_t pushSprite(const std::string& PATH);
+	void popSprite();
+
+	void render();
+	void renderTextures();
+	void renderMisc();
+
+	//BUTTONS
 	Button* solve;
 	Button* play;
 	std::vector<std::vector<Button>> buttons;
@@ -30,29 +45,16 @@ class Game
 	sf::Texture* active_box;
 
 	sf::Vector2i mousePos;
-	void initWindow();
-	void initMisc();
-	void initUI();
-
-	void render();
-	void renderTextures();
-	void renderMisc();
-
-	size_t pushSprite(const std::string& PATH);
-	void popSprite();
-
-	void update();
-	void updateEvents();
-
-
+	//Rendering
 	void drawButton(Button button);
 	void updateButton(Button* button);
-	void initTable();
 	sf::Texture* makeTexture(std::string PATH);
+	//TABLE
+	void solvingAlgorithm();
+
 public:
 	sf::RenderWindow* window = nullptr;
 	void mainLoop();
 	Game();
 	~Game();
-	
 };
