@@ -55,6 +55,7 @@ class Game
 	bool isValid(const int row, const int col, int val);
 
 public:
+	int gamestate = 1;
 	sf::RenderWindow* window = nullptr;
 	void mainLoop();
 	Game();

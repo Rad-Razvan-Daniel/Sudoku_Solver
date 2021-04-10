@@ -33,20 +33,18 @@ Game::~Game()
 
 void Game::mainLoop()
 {
-	int gamestate = 2;
+	
 	while (window->isOpen())
 	{
-		if (gamestate == 1)
+		if (gamestate == 2)
 		{
+			solve->state = 2;
+			solvingAlgorithmLoop();
+			gamestate = 1;
+		}
 			update();
 			render();
-		}
-		else
-		{
-			solvingAlgorithmLoop();/*
-			update();
-			render();*/
-		}
+		
 	}
 }
 
@@ -111,7 +109,17 @@ void Game::initUI()
 void Game::initTable()
 {
 	sudoku = new Table();
-
+	for (int j = 0; j < 9; j++)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			if (sudoku->table[j][i] != 0)
+			{
+				sudoku->validityTable[j][i];
+			}
+			
+		}
+	}
 
 
 	//sudoku->consoleSolve();
@@ -135,7 +143,6 @@ bool Game::solvingAlgorithmLoop(int row, int col) //returns if it's solved or no
 		col = 0;
 	}
 	updateButton(&buttons[row][col], 2); //
-
 	render(); 
 	if (sudoku->table[row][col] != 0)
 		return solvingAlgorithmLoop(row, col + 1);
@@ -158,21 +165,25 @@ bool Game::solvingAlgorithmLoop(int row, int col) //returns if it's solved or no
 }
 bool Game::isValid(const int row, const int col, int val)
 {
-	for (int i = 0; i < 8; i++)
-		if (sudoku->table[row][i] == val) return false;
+	if (sudoku->validityTable[row][col])
+	{
+		for (int i = 0; i < 8; i++)
+			if (sudoku->table[row][i] == val) return false;
 
-	//check col
-	for (int i = 0; i < 8; i++)
-		if (sudoku->table[i][col] == val) return false;
+		//check col
+		for (int i = 0; i < 8; i++)
+			if (sudoku->table[i][col] == val) return false;
 
-	//check box
-	int x = row - row % 3; //lets say row is 8. row%8 = 2. 8-2 = 6 ; starting from the row 6 we can play around with [6],[7],[8]
-	int y = col - col % 3;
-	for (int i = 0; i < 3; i++)
-		for (int ii = 0; ii < 3; ii++)
-			if (sudoku->table[i + x][ii + y] == val)return false;
+		//check box
+		int x = row - row % 3; //lets say row is 8. row%8 = 2. 8-2 = 6 ; starting from the row 6 we can play around with [6],[7],[8]
+		int y = col - col % 3;
+		for (int i = 0; i < 3; i++)
+			for (int ii = 0; ii < 3; ii++)
+				if (sudoku->table[i + x][ii + y] == val)return false;
 
-	return true;
+		return true;
+	}
+	return false;
 }
 
 
@@ -263,17 +274,19 @@ void Game::updateButton(Button* button, int forceState)
 	if (forceState != 0)
 	{
 		button->state = forceState;
+		button->updateTexture();
 	}
 	else if (button->buttonbounds.contains(mousePos))
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			std::cout << "State 2 \n";
+			//std::cout << "State 2 \n";
 			button->state = 2;
+			if(button == solve) gamestate = 2;
 		}
 		else
 		{
-			std::cout << "State 1 \n";
+			//std::cout << "State 1 \n";
 			button->state = 1;
 		}
 	}
