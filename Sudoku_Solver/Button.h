@@ -21,4 +21,5 @@ public:
 	int state = 0;
 	sf::IntRect buttonbounds;
 	void updateTexture();
+	void updateNumber(int nr);
 };

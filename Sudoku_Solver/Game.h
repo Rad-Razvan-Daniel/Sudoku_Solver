@@ -8,7 +8,7 @@
 #include <string>
 class Game
 {
-	//GAME
+//GAME
 	void initWindow();
 	void initMisc();
 	void initUI();
@@ -32,7 +32,7 @@ class Game
 	void renderTextures();
 	void renderMisc();
 
-	//BUTTONS
+//BUTTONS
 	Button* solve;
 	Button* play;
 	std::vector<std::vector<Button>> buttons;
@@ -47,10 +47,12 @@ class Game
 	sf::Vector2i mousePos;
 	//Rendering
 	void drawButton(Button button);
-	void updateButton(Button* button);
+	void updateButton(Button* button, int state = 0);
 	sf::Texture* makeTexture(std::string PATH);
-	//TABLE
-	void solvingAlgorithm();
+//TABLE
+	Table* sudoku;
+	bool solvingAlgorithmLoop(int row=0, int col=0);
+	bool isValid(const int row, const int col, int val);
 
 public:
 	sf::RenderWindow* window = nullptr;

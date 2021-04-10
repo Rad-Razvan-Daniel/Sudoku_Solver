@@ -33,10 +33,20 @@ Game::~Game()
 
 void Game::mainLoop()
 {
+	int gamestate = 2;
 	while (window->isOpen())
 	{
-		update();
-		render();
+		if (gamestate == 1)
+		{
+			update();
+			render();
+		}
+		else
+		{
+			solvingAlgorithmLoop();/*
+			update();
+			render();*/
+		}
 	}
 }
 
@@ -82,24 +92,30 @@ void Game::initMisc()
 
 void Game::initUI()
 {
-	Table sudoku;
+
 	//		string, font,path,path,  path    x  y, width, height
 	solve = new Button("solve", font, def, hover, active, 300, 20, 180, 80);
 	play = new Button("play", font, def, hover, active, 100, 20, 180, 80);
 	std::vector<Button> x;
 
-	for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //column iter
+	for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
 	{
 		buttons.push_back(x);
 		for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
 		{
-			Button* btn = new Button((std::to_string(sudoku.table[j][i]) == "0") ? "" : std::to_string(sudoku.table[j][i]), font, box, hover_box, active_box, xoffset, 105 + yoffset, 50, 50);
+			Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]), font, box, hover_box, active_box, xoffset, 105 + yoffset, 50, 50);
 			buttons[j].push_back(*btn);
 		}
 	}
 }
 void Game::initTable()
 {
+	sudoku = new Table();
+
+
+
+	//sudoku->consoleSolve();
+	//sudoku->printTable();
 }
 sf::Texture* Game::makeTexture(std::string PATH)
 {
@@ -107,9 +123,59 @@ sf::Texture* Game::makeTexture(std::string PATH)
 	temp->loadFromFile("Resources\\Textures\\" + PATH);
 	return temp;
 }
-void Game::solvingAlgorithm()
+
+bool Game::solvingAlgorithmLoop(int row, int col) //returns if it's solved or not
 {
+
+	if (row == 8 && col == 9)
+		return true; 
+	//safety check because when we solve() we will encounter col+1, which can be 9
+	if (col == 9) {
+		row++;
+		col = 0;
+	}
+	updateButton(&buttons[row][col], 2); //
+
+	render(); 
+	if (sudoku->table[row][col] != 0)
+		return solvingAlgorithmLoop(row, col + 1);
+
+	for (int nr = 1; nr < 10; nr++)
+	{
+		buttons[row][col].updateNumber(nr); //
+		//check validity
+		if (isValid(row, col, nr))
+		{
+			sudoku->table[row][col] = nr;
+			if (solvingAlgorithmLoop(row, col))
+				return true;
+		}
+		//if we got here, n was wrong, meaning we should make this position the initial value; 0
+		updateButton(&buttons[row][col]);
+		sudoku->table[row][col] = 0;
+	}
+	return false;
 }
+bool Game::isValid(const int row, const int col, int val)
+{
+	for (int i = 0; i < 8; i++)
+		if (sudoku->table[row][i] == val) return false;
+
+	//check col
+	for (int i = 0; i < 8; i++)
+		if (sudoku->table[i][col] == val) return false;
+
+	//check box
+	int x = row - row % 3; //lets say row is 8. row%8 = 2. 8-2 = 6 ; starting from the row 6 we can play around with [6],[7],[8]
+	int y = col - col % 3;
+	for (int i = 0; i < 3; i++)
+		for (int ii = 0; ii < 3; ii++)
+			if (sudoku->table[i + x][ii + y] == val)return false;
+
+	return true;
+}
+
+
 void Game::render()
 {
 	//remember to add button to the vector of printable stuff before you try to print it
@@ -138,7 +204,7 @@ void Game::renderMisc()
 	drawButton(*solve);
 	drawButton(*play);
 
-	for (int j = 0; j < 9; j++) //column iter
+	for (int j = 0; j < 9; j++) //col iter
 	{
 		for (int i = 0; i < 9; i++)
 		{
@@ -177,7 +243,7 @@ void Game::update()
 	updateButton(play);
 	updateButton(solve);
 
-	for (int j = 0; j < 9; j++) //column iter
+	for (int j = 0; j < 9; j++) //col iter
 	{
 		for (int i = 0; i < 9; i++)
 		{
@@ -192,9 +258,13 @@ void Game::drawButton(Button button)
 	window->draw(button.text);
 }
 
-void Game::updateButton(Button* button)
+void Game::updateButton(Button* button, int forceState)
 {
-	if (button->buttonbounds.contains(mousePos))
+	if (forceState != 0)
+	{
+		button->state = forceState;
+	}
+	else if (button->buttonbounds.contains(mousePos))
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{

@@ -37,14 +37,17 @@ void Button::updateTexture()
 	switch (state)
 	{
 	case 1: // hover
-		std::cout << "hover" << std::endl;
 		button.setTexture(hover_texture);
 		break;
 	case 2: //active
-		std::cout << "active" << std::endl;
 		button.setTexture(active_texture);
 		break;
 	default:
 		button.setTexture(texture);
 	}
+}
+
+void Button::updateNumber(int nr)
+{
+	text.setString(std::to_string(nr));
 }

@@ -3,7 +3,7 @@ Table::Table()
 {
 	//initTable();
 }
-Table::~Table()
+Table::~Table() 
 {
 	//delete[] table[];
 }
