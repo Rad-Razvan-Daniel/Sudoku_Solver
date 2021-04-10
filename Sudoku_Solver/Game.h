@@ -52,7 +52,6 @@ class Game
 //TABLE
 	Table* sudoku;
 	bool solvingAlgorithmLoop(int row=0, int col=0);
-	bool isValid(const int row, const int col, int val);
 
 public:
 	int gamestate = 1;

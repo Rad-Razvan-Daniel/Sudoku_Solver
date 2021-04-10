@@ -40,11 +40,14 @@ void Game::mainLoop()
 		{
 			solve->state = 2;
 			solvingAlgorithmLoop();
-			gamestate = 1;
-		}
-			update();
-			render();
 		
+		}
+		else
+		{
+		
+		update();
+		render();
+	}
 	}
 }
 
@@ -78,6 +81,7 @@ void Game::initMisc()
 {
 	sf::Font* temp = new sf::Font;
 	temp->loadFromFile("Resources\\font.ttf");
+
 
 	font = temp;
 	def = makeTexture("image.jpg");
@@ -131,61 +135,28 @@ sf::Texture* Game::makeTexture(std::string PATH)
 	temp->loadFromFile("Resources\\Textures\\" + PATH);
 	return temp;
 }
-
+//updateButton(&buttons[row][col],2);
+//buttons[row][col].updateNumber(nr);
 bool Game::solvingAlgorithmLoop(int row, int col) //returns if it's solved or not
 {
 
-	if (row == 8 && col == 9)
-		return true; 
-	//safety check because when we solve() we will encounter col+1, which can be 9
-	if (col == 9) {
-		row++;
-		col = 0;
-	}
-	updateButton(&buttons[row][col], 2); //
-	render(); 
-	if (sudoku->table[row][col] != 0)
-		return solvingAlgorithmLoop(row, col + 1);
 
-	for (int nr = 1; nr < 10; nr++)
-	{
-		buttons[row][col].updateNumber(nr); //
-		//check validity
-		if (isValid(row, col, nr))
-		{
-			sudoku->table[row][col] = nr;
-			if (solvingAlgorithmLoop(row, col))
-				return true;
-		}
-		//if we got here, n was wrong, meaning we should make this position the initial value; 0
-		updateButton(&buttons[row][col]);
-		sudoku->table[row][col] = 0;
-	}
-	return false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
-bool Game::isValid(const int row, const int col, int val)
-{
-	if (sudoku->validityTable[row][col])
-	{
-		for (int i = 0; i < 8; i++)
-			if (sudoku->table[row][i] == val) return false;
-
-		//check col
-		for (int i = 0; i < 8; i++)
-			if (sudoku->table[i][col] == val) return false;
-
-		//check box
-		int x = row - row % 3; //lets say row is 8. row%8 = 2. 8-2 = 6 ; starting from the row 6 we can play around with [6],[7],[8]
-		int y = col - col % 3;
-		for (int i = 0; i < 3; i++)
-			for (int ii = 0; ii < 3; ii++)
-				if (sudoku->table[i + x][ii + y] == val)return false;
-
-		return true;
-	}
-	return false;
-}
-
 
 void Game::render()
 {
@@ -235,7 +206,8 @@ void Game::updateEvents()
 
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape)
-				window->close();
+				gamestate = 1;
+				//window->close();
 			break;
 
 		case sf::Event::MouseMoved:
@@ -271,7 +243,7 @@ void Game::drawButton(Button button)
 
 void Game::updateButton(Button* button, int forceState)
 {
-	if (forceState != 0)
+	if (forceState > 0) //if forcestate isn't default (0) we force the texture to a specific value
 	{
 		button->state = forceState;
 		button->updateTexture();
