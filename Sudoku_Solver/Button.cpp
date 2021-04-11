@@ -56,15 +56,16 @@ void Button::setText(int nr)
 		return;
 	}
 	text.setString(std::to_string(nr));
-
 }
 
 void Button::lockToggle()
 {
-
 	changeable = !changeable;
 }
-
+bool Button::isLockOn()
+{
+	return !changeable;
+}
 void Button::updateButton(int changeState, int nr)
 {
 	if (changeable)

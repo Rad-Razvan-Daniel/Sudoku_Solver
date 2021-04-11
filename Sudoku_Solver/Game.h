@@ -53,6 +53,8 @@ class Game
 	Table* sudoku;
 	bool solvingAlgorithmLoop(int table[9][9]);
 
+	void solvingAlgorithmAnimation(int table[9][9]);
+
 public:
 	int gamestate = 1;
 	sf::RenderWindow* window = nullptr;

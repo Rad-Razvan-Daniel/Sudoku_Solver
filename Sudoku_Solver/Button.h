@@ -22,6 +22,7 @@ public:
 	sf::RectangleShape button;
 	sf::IntRect buttonbounds;
 	void lockToggle();
+	bool isLockOn();
 	void updateButton(int changeState = 0, int nr = INT_MIN); 
 
 };

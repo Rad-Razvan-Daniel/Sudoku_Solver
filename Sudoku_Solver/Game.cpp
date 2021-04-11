@@ -22,7 +22,7 @@ void Game::mainLoop()
 
 			solve->lockToggle();
 			solvingAlgorithmLoop(sudoku->table);
-
+			solvingAlgorithmAnimation(sudoku->table);
 			solve->lockToggle();
 			update();
 			render();
@@ -139,7 +139,25 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 	// trigger for backtracking
 	return false;
 }
-
+void Game::solvingAlgorithmAnimation(int table[9][9])
+{
+	int count = 0;
+	for (int j = 0; j < 9; j++)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			if (buttons[j][i].isLockOn())
+			{
+				count++;
+				buttons[j][i].lockToggle();
+				buttons[i][j].updateButton(0);
+			}
+			update();
+			render();
+		}
+	}
+	std::cout << count;
+}
 
 
 void Game::update()
