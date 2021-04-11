@@ -51,8 +51,12 @@ class Game
 	sf::Texture* makeTexture(std::string PATH);
 //TABLE
 	Table* sudoku;
-	bool solvingAlgorithmLoop(int row=0, int col=0);
-
+	bool solvingAlgorithmLoop(int table[9][9]);
+	bool isZero(int table[9][9]);
+	bool isSafe(int table[9][9], int row, int col, int val);
+	bool isSafeRowCol(int table[9][9], int row, int col, int val);
+	bool isSafeBox(int table[9][9], int boxStartRow, int boxStartCol, int val);
+	bool emptyBoxes(int table[9][9], int &row, int& col);
 public:
 	int gamestate = 1;
 	sf::RenderWindow* window = nullptr;

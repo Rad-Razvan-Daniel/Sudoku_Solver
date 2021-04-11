@@ -1,21 +1,6 @@
 #include "Game.h"
-size_t Game::pushSprite(const std::string& PATH)
-{
-	auto texture = std::make_unique<sf::Texture>();				//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
-	texture->loadFromFile("Resources\\Textures\\" + PATH);
-	sf::Sprite sprite;
 
-	sprite.setTexture(*texture);
 
-	sprites.push_back(sprite);
-	textures.push_back(std::move(texture));
-
-	return sprites.size();
-}
-void Game::popSprite()
-{
-	textures.pop_back();
-}
 Game::Game()
 {
 	initWindow();
@@ -26,10 +11,6 @@ Game::Game()
 	//used for rendering background
 	pushSprite("background.jpg");
 }
-Game::~Game()
-{
-	delete window;
-}
 
 void Game::mainLoop()
 {
@@ -39,8 +20,11 @@ void Game::mainLoop()
 		if (gamestate == 2)
 		{
 			solve->state = 2;
-			solvingAlgorithmLoop();
 		
+			solvingAlgorithmLoop(sudoku->table);
+			gamestate = 1;
+			update();
+			render();
 		}
 		else
 		{
@@ -96,8 +80,8 @@ void Game::initUI()
 {
 
 	//		string, font,path,path,  path    x  y, width, height
-	solve = new Button("solve", font, def, hover, active, 300, 20, 180, 80);
-	play = new Button("play", font, def, hover, active, 100, 20, 180, 80);
+	solve = new Button("solve", font, def, hover, active, 300, 20, 150, 50);
+	play = new Button("play", font, def, hover, active, 100, 20, 150, 50);
 	std::vector<Button> x;
 
 	for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
@@ -135,33 +119,99 @@ sf::Texture* Game::makeTexture(std::string PATH)
 	temp->loadFromFile("Resources\\Textures\\" + PATH);
 	return temp;
 }
-//updateButton(&buttons[row][col],2);
-//buttons[row][col].updateNumber(nr);
-bool Game::solvingAlgorithmLoop(int row, int col) //returns if it's solved or not
+/*
+			updateButton(&buttons[row][col], 2);
+			buttons[row][col].updateNumber(val);
+			update();
+			render();
+
+*/
+bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 {
+	update();
+	render();
 
 
+	int row, col;
+	if (!emptyBoxes(table, row, col))
+	{
+
+		return true;
+		std::cout << "complete \n";
+	}
+	for (int val = 1; val <= 9; val++)
+	{
+		if (isSafe(table, row, col, val))
+		{
+			updateButton(&buttons[row][col], 2);
+			buttons[row][col].updateNumber(val);
+			render();
+			table[row][col] = val;
+			
+
+			if (solvingAlgorithmLoop(table))
+				return true;
+
+			// Failure, unmake & try again
+			table[row][col] = 0;
+		}
+	}
+
+	// This triggers backtracking
+	return false;
+}
+
+bool Game::isZero(int table[9][9])
+{
+	return false;
+}
+bool Game::isSafe(int table[9][9], int row, int col, int val)
+{
+	return    !isSafeRowCol(table, row,col, val) 
+		   && !isSafeBox(table, row - row % 3,col - col % 3, val)
+		   && table[row][col] == 0;
+}
+bool Game::isSafeRowCol(int table[9][9], int row, int col, int val)
+{
+	std::cout << "trying " << row << " "<<col;
+	//row 
+	for (int col = 0; col < 9; col++)
+		if (table[row][col] == val)
+			return true;
+	//col
+	for (int row = 0; row < 9; row++)
+		if (table[row][col] == val)
+			return true;
+	return false;
+}
+bool Game::isSafeBox(int table[9][9], int boxStartRow, int boxStartCol, int val)
+{
+	for (int row = 0; row < 3; row++)
+		for (int col = 0; col < 3; col++)
+			if (table[row + boxStartRow][col + boxStartCol] ==val)
+				return true;
+	return false;
+}
+bool Game::emptyBoxes(int table[9][9], int& row, int& col)
+{
+	
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	for (row = 0; row < 9; row++)
+	{
+		for (col = 0; col < 9; col++)
+		{
+			if (table[row][col] == 0) return true;
+		}
+	}
+	return false;
 }
 
 void Game::render()
 {
+	sf::Color bgcol(245,243,194);
 	//remember to add button to the vector of printable stuff before you try to print it
-	window->clear();
+	window->clear(bgcol);
 	//draws everything except interractables.
 	renderTextures();
 	//draws buttons
@@ -264,4 +314,27 @@ void Game::updateButton(Button* button, int forceState)
 	}
 	else button->state = 0;
 	button->updateTexture();
+}
+
+Game::~Game()
+{
+	delete window;
+}
+
+size_t Game::pushSprite(const std::string& PATH)
+{
+	auto texture = std::make_unique<sf::Texture>();				//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
+	texture->loadFromFile("Resources\\Textures\\" + PATH);
+	sf::Sprite sprite;
+
+	sprite.setTexture(*texture);
+
+	sprites.push_back(sprite);
+	textures.push_back(std::move(texture));
+
+	return sprites.size();
+}
+void Game::popSprite()
+{
+	textures.pop_back();
 }

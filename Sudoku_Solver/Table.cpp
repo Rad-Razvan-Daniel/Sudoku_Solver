@@ -19,34 +19,6 @@ void Table::printTable()
 		std::cout << std::endl;
 	}
 }
-
-bool Table::consoleSolve(int line, int column)
-{
-	if (line == 8 && column == 9)
-		return true;
-	//safety check because when we solve() we will encounter column+1, which can be 9
-	if (column == 9) {
-		line++;
-		column = 0;
-	}
-	if (table[line][column] != 0)
-		return consoleSolve(line, column + 1);
-
-	for (int nr = 1; nr < 10; nr++)
-	{
-		//check validity
-		if (isValid(line, column, nr))
-		{
-			table[line][column] = nr;
-			if (consoleSolve(line, column))
-				return true;
-		}
-		//if we got here, n was wrong, meaning we should make this position the initial value; 0
-		table[line][column] = 0;
-	}
-	return false;
-}
-
 void Table::initTable()
 {
 	for (int i = 0; i < 9; i++)
