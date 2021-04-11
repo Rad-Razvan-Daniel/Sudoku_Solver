@@ -145,6 +145,7 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 		{
 			updateButton(&buttons[row][col], 2);
 			buttons[row][col].updateNumber(val);
+			update();
 			render();
 			table[row][col] = val;
 			
