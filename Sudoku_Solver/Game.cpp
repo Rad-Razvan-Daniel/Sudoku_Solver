@@ -1,6 +1,5 @@
 #include "Game.h"
 
-
 Game::Game()
 {
 	initWindow();
@@ -14,24 +13,26 @@ Game::Game()
 
 void Game::mainLoop()
 {
-	
+
 	while (window->isOpen())
 	{
 		if (gamestate == 2)
 		{
 			solve->updateButton(2);
-		
+
+			solve->lockToggle();
 			solvingAlgorithmLoop(sudoku->table);
 			gamestate = 1;
+			solve->lockToggle();
 			update();
 			render();
 		}
 		else
 		{
-		
-		update();
-		render();
-	}
+
+			update();
+			render();
+		}
 	}
 }
 
@@ -71,6 +72,7 @@ void Game::initMisc()
 	def = makeTexture("image.jpg");
 	hover = makeTexture("hover_image.jpg");
 	active = makeTexture("active_image.jpg");
+
 	box = makeTexture("box.jpg");
 	active_box = makeTexture("active_box.jpg");
 	hover_box = makeTexture("hover_box.jpg");
@@ -94,6 +96,7 @@ void Game::initUI()
 		}
 	}
 }
+
 void Game::initTable()
 {
 	sudoku = new Table();
@@ -101,21 +104,10 @@ void Game::initTable()
 		for (int i = 0; i < 9; i++)
 			if (sudoku->table[j][i] != 0)
 				sudoku->validityTable[j][i];
-	
-}
-sf::Texture* Game::makeTexture(std::string PATH)
-{
-	sf::Texture* temp = new sf::Texture;
-	temp->loadFromFile("Resources\\Textures\\" + PATH);
-	return temp;
-}
-/*
-			updateButton(&buttons[row][col], 2);
-			buttons[row][col].setText(val);
-			update();
-			render();
 
-*/
+}
+
+
 bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 {
 	update();
@@ -133,28 +125,90 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 	{
 		if (sudoku->isSafe(row, col, val))
 		{
-			buttons[row][col].updateButton(1, 2);
-			buttons[row][col].updateButton(0,val);
-			update();
-			render();
+			buttons[row][col].updateButton(1, val);
+
 			table[row][col] = val;
-			
+
 
 			if (solvingAlgorithmLoop(table))
 				return true;
 
-			// Failure, unmake & try again
+			//tru again!
 			table[row][col] = 0;
+			buttons[row][col].updateButton(0, 0);
+
 		}
 	}
 
-	// This triggers backtracking
+	// trigger for backtracking
 	return false;
 }
 
+
+
+void Game::update()
+{
+	updateEvents();
+	updateEventButton(play);
+	updateEventButton(solve);
+
+	for (int j = 0; j < 9; j++) //col iter
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			updateEventButton(&buttons[j][i]);
+		}
+	}
+}
+void Game::updateEvents()
+{
+	while (window->pollEvent(event))
+	{
+		switch (event.type)
+		{
+		case sf::Event::Closed:
+			window->close();	break;
+
+		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::Escape)
+
+				gamestate = 1;
+			//window->close();
+			break;
+
+		case sf::Event::MouseMoved:
+			mousePos = sf::Mouse::getPosition(*window);
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+void Game::updateEventButton(Button* button, int changeState)
+{
+	if (button->buttonbounds.contains(mousePos))
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			button->updateButton(2);
+			if (button == solve)
+			{
+				gamestate = 2;
+			}
+			return;
+		}
+		button->updateButton(1);
+		return;
+	}
+	button->updateButton(0);
+}
+
+
+
 void Game::render()
 {
-	sf::Color bgcol(245,243,194);
+	sf::Color bgcol(245, 243, 194);
 	//remember to add button to the vector of printable stuff before you try to print it
 	window->clear(bgcol);
 	//draws everything except interractables.
@@ -190,73 +244,25 @@ void Game::renderMisc()
 	}
 }
 
-void Game::updateEvents()
-{
-	while (window->pollEvent(event))
-	{
-		switch (event.type)
-		{
-		case sf::Event::Closed:
-			window->close();	break;
-
-		case sf::Event::KeyPressed:
-			if (event.key.code == sf::Keyboard::Escape)
-				gamestate = 1;
-				//window->close();
-			break;
-
-		case sf::Event::MouseMoved:
-			mousePos = sf::Mouse::getPosition(*window);
-			break;
-
-		default:
-			break;
-		}
-	}
-}
-
-void Game::update()
-{
-	updateEvents();
-	updateEventButton(play);
-	updateEventButton(solve);
-
-	for (int j = 0; j < 9; j++) //col iter
-	{
-		for (int i = 0; i < 9; i++)
-		{
-			updateEventButton(&buttons[j][i]);
-		}
-	}
-}
-
 void Game::drawButton(Button button)
 {
 	window->draw(button.button);
 	window->draw(button.text);
 }
 
-void Game::updateEventButton(Button* button, int changeState)
-{
-	if (button->buttonbounds.contains(mousePos))
-	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			button->updateButton(2);
-			if (button == solve) gamestate = 2;
-			return;
-		}
-		button->updateButton(1);
-		return;
-	}
-	button->updateButton(0);
-}
+
 
 Game::~Game()
 {
 	delete window;
 }
 
+sf::Texture* Game::makeTexture(std::string PATH)
+{
+	sf::Texture* temp = new sf::Texture;
+	temp->loadFromFile("Resources\\Textures\\" + PATH);
+	return temp;
+}
 size_t Game::pushSprite(const std::string& PATH)
 {
 	auto texture = std::make_unique<sf::Texture>();				//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();

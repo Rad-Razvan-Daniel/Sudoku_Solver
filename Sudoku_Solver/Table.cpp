@@ -12,13 +12,11 @@ Table::~Table()
 void Table::printTable()
 {
 	for (int i = 0; i < 9; i++)
-	{
 		for (int j = 0; j < 9; j++)
-		{
 			std::cout << table[i][j];
-		}
+		
 		std::cout << std::endl;
-	}
+	
 }
 void Table::initTable()
 {
@@ -29,7 +27,8 @@ void Table::initTable()
 
 bool Table::isSafe(int row, int col, int val)
 {
-	return    !isSafeRowCol(row, col, val)
+	
+	return !isSafeRowCol(row, col, val)
 		&& !isSafeBox(row - row % 3, col - col % 3, val)
 		&& table[row][col] == 0;
 }

@@ -50,7 +50,13 @@ void Button::updateTexture()
 
 void Button::setText(int nr)
 {
+	if (nr == 0)
+	{
+		text.setString("");
+		return;
+	}
 	text.setString(std::to_string(nr));
+
 }
 
 void Button::lockToggle()
@@ -60,13 +66,12 @@ void Button::lockToggle()
 }
 
 void Button::updateButton(int changeState, int nr)
-{//gets a state, changes the state of the button
-	//calls updateTexture
+{
 	if (changeable)
 	{
 		if (nr != INT_MIN)
-			state = changeState;
-
+			setText(nr);
+		state = changeState;
 		updateTexture();
 	}
 }
