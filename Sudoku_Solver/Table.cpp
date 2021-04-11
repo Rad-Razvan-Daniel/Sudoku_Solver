@@ -9,15 +9,6 @@ Table::~Table()
 	//delete[] table[];
 }
 
-void Table::printTable()
-{
-	for (int i = 0; i < 9; i++)
-		for (int j = 0; j < 9; j++)
-			std::cout << table[i][j];
-		
-		std::cout << std::endl;
-	
-}
 void Table::initTable()
 {
 	for (int i = 0; i < 9; i++)
@@ -34,7 +25,6 @@ bool Table::isSafe(int row, int col, int val)
 }
 bool Table::isSafeRowCol(int row, int col, int val)
 {
-	std::cout << "trying " << row << " " << col << std::endl;
 	//row 
 	for (int col = 0; col < 9; col++)
 		if (table[row][col] == val)

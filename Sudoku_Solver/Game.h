@@ -10,12 +10,13 @@ class Game
 {
 //GAME
 	void initWindow();
-	void initMisc();
-	void initUI();
+	void initMisc(int gamestate);
+	void initFont();
+	void initUI(int gamestate);
 	void initTable();
 	//LOGIC
 
-	void update();
+	void update(int gamestate = 1);
 	void updateEvents();
 	sf::Event event;
 
@@ -30,11 +31,13 @@ class Game
 
 	void render();
 	void renderTextures();
-	void renderMisc();
+	void renderMisc(int gamestate);
 
 //BUTTONS
 	Button* solve;
+	Button* generate;
 	Button* play;
+	Button* settings;
 	std::vector<std::vector<Button>> buttons;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
@@ -56,7 +59,7 @@ class Game
 	void solvingAlgorithmAnimation(int table[9][9]);
 
 public:
-	int gamestate = 1;
+	int gamestate = 0;
 	sf::RenderWindow* window = nullptr;
 	void mainLoop();
 	Game();
