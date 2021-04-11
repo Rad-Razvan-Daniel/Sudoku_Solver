@@ -7,7 +7,7 @@ Game::Game()
 	initTable(); //back end algorithm
 	initUI(); //Table, Buttons
 
-	//used for rendering background
+	pushSprite("bgoverlay.jpg");
 	pushSprite("background.jpg");
 }
 
@@ -22,17 +22,17 @@ void Game::mainLoop()
 
 			solve->lockToggle();
 			solvingAlgorithmLoop(sudoku->table);
-			gamestate = 1;
+
 			solve->lockToggle();
 			update();
 			render();
+			gamestate--;
+			continue;
 		}
-		else
-		{
-
 			update();
 			render();
-		}
+		
+
 	}
 }
 
@@ -115,24 +115,20 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 
 
 	int row, col;
-	if (!sudoku->emptyBoxes(row, col))
-	{
+	if (!sudoku->emptyBoxes(row, col)) return true;
 
-		return true;
-		std::cout << "complete \n";
-	}
 	for (int val = 1; val <= 9; val++)
 	{
 		if (sudoku->isSafe(row, col, val))
 		{
 			buttons[row][col].updateButton(1, val);
-
+			buttons[row][col].lockToggle();
 			table[row][col] = val;
 
 
 			if (solvingAlgorithmLoop(table))
 				return true;
-
+			buttons[row][col].lockToggle();
 			//tru again!
 			table[row][col] = 0;
 			buttons[row][col].updateButton(0, 0);
@@ -160,6 +156,7 @@ void Game::update()
 		}
 	}
 }
+
 void Game::updateEvents()
 {
 	while (window->pollEvent(event))
@@ -185,6 +182,7 @@ void Game::updateEvents()
 		}
 	}
 }
+
 void Game::updateEventButton(Button* button, int changeState)
 {
 	if (button->buttonbounds.contains(mousePos))
@@ -257,12 +255,15 @@ Game::~Game()
 	delete window;
 }
 
+
+
 sf::Texture* Game::makeTexture(std::string PATH)
 {
 	sf::Texture* temp = new sf::Texture;
 	temp->loadFromFile("Resources\\Textures\\" + PATH);
 	return temp;
 }
+
 size_t Game::pushSprite(const std::string& PATH)
 {
 	auto texture = std::make_unique<sf::Texture>();				//std::unique_ptr<sf::Texture>texture = std::make_unique<sf::Texture>();
@@ -276,6 +277,7 @@ size_t Game::pushSprite(const std::string& PATH)
 
 	return sprites.size();
 }
+
 void Game::popSprite()
 {
 	textures.pop_back();

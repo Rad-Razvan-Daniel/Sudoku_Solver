@@ -1,6 +1,6 @@
 #include "Button.h"
 #include <iostream>
-Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, int width, int height)
+Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height)
 {
 	sf::Font* tempfont = new sf::Font;
 	font = tempfont;
@@ -14,7 +14,7 @@ Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* h
 	//we estmate the text length. we substract that from the total length.
 	if (def->getSize().x > 100)
 	{
-		text.setPosition(x + str.length() * 10, y + 20);
+		text.setPosition(x + str.length() * 10, y + 10);
 	}
 	else text.setPosition(x + 10, y + 10);
 	text.setFillColor(sf::Color::Black);
