@@ -47,16 +47,12 @@ class Game
 	sf::Vector2i mousePos;
 	//Rendering
 	void drawButton(Button button);
-	void updateButton(Button* button, int state = 0);
+	void updateEventButton(Button* button, int state = 0);
 	sf::Texture* makeTexture(std::string PATH);
 //TABLE
 	Table* sudoku;
 	bool solvingAlgorithmLoop(int table[9][9]);
-	bool isZero(int table[9][9]);
-	bool isSafe(int table[9][9], int row, int col, int val);
-	bool isSafeRowCol(int table[9][9], int row, int col, int val);
-	bool isSafeBox(int table[9][9], int boxStartRow, int boxStartCol, int val);
-	bool emptyBoxes(int table[9][9], int &row, int& col);
+
 public:
 	int gamestate = 1;
 	sf::RenderWindow* window = nullptr;

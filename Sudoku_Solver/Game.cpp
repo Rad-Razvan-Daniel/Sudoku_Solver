@@ -19,7 +19,7 @@ void Game::mainLoop()
 	{
 		if (gamestate == 2)
 		{
-			solve->state = 2;
+			solve->updateButton(2);
 		
 			solvingAlgorithmLoop(sudoku->table);
 			gamestate = 1;
@@ -79,7 +79,7 @@ void Game::initMisc()
 void Game::initUI()
 {
 
-	//		string, font,path,path,  path    x  y, width, height
+	//string, font,path,path,path,x,y,width,height
 	solve = new Button("solve", font, def, hover, active, 300, 20, 150, 50);
 	play = new Button("play", font, def, hover, active, 100, 20, 150, 50);
 	std::vector<Button> x;
@@ -98,20 +98,10 @@ void Game::initTable()
 {
 	sudoku = new Table();
 	for (int j = 0; j < 9; j++)
-	{
 		for (int i = 0; i < 9; i++)
-		{
 			if (sudoku->table[j][i] != 0)
-			{
 				sudoku->validityTable[j][i];
-			}
-			
-		}
-	}
-
-
-	//sudoku->consoleSolve();
-	//sudoku->printTable();
+	
 }
 sf::Texture* Game::makeTexture(std::string PATH)
 {
@@ -121,7 +111,7 @@ sf::Texture* Game::makeTexture(std::string PATH)
 }
 /*
 			updateButton(&buttons[row][col], 2);
-			buttons[row][col].updateNumber(val);
+			buttons[row][col].setText(val);
 			update();
 			render();
 
@@ -133,7 +123,7 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 
 
 	int row, col;
-	if (!emptyBoxes(table, row, col))
+	if (!sudoku->emptyBoxes(row, col))
 	{
 
 		return true;
@@ -141,10 +131,10 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 	}
 	for (int val = 1; val <= 9; val++)
 	{
-		if (isSafe(table, row, col, val))
+		if (sudoku->isSafe(row, col, val))
 		{
-			updateButton(&buttons[row][col], 2);
-			buttons[row][col].updateNumber(val);
+			buttons[row][col].updateButton(1, 2);
+			buttons[row][col].updateButton(0,val);
 			update();
 			render();
 			table[row][col] = val;
@@ -159,52 +149,6 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 	}
 
 	// This triggers backtracking
-	return false;
-}
-
-bool Game::isZero(int table[9][9])
-{
-	return false;
-}
-bool Game::isSafe(int table[9][9], int row, int col, int val)
-{
-	return    !isSafeRowCol(table, row,col, val) 
-		   && !isSafeBox(table, row - row % 3,col - col % 3, val)
-		   && table[row][col] == 0;
-}
-bool Game::isSafeRowCol(int table[9][9], int row, int col, int val)
-{
-	std::cout << "trying " << row << " "<<col;
-	//row 
-	for (int col = 0; col < 9; col++)
-		if (table[row][col] == val)
-			return true;
-	//col
-	for (int row = 0; row < 9; row++)
-		if (table[row][col] == val)
-			return true;
-	return false;
-}
-bool Game::isSafeBox(int table[9][9], int boxStartRow, int boxStartCol, int val)
-{
-	for (int row = 0; row < 3; row++)
-		for (int col = 0; col < 3; col++)
-			if (table[row + boxStartRow][col + boxStartCol] ==val)
-				return true;
-	return false;
-}
-bool Game::emptyBoxes(int table[9][9], int& row, int& col)
-{
-	
-
-
-	for (row = 0; row < 9; row++)
-	{
-		for (col = 0; col < 9; col++)
-		{
-			if (table[row][col] == 0) return true;
-		}
-	}
 	return false;
 }
 
@@ -274,14 +218,14 @@ void Game::updateEvents()
 void Game::update()
 {
 	updateEvents();
-	updateButton(play);
-	updateButton(solve);
+	updateEventButton(play);
+	updateEventButton(solve);
 
 	for (int j = 0; j < 9; j++) //col iter
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			updateButton(&buttons[j][i]);
+			updateEventButton(&buttons[j][i]);
 		}
 	}
 }
@@ -292,29 +236,20 @@ void Game::drawButton(Button button)
 	window->draw(button.text);
 }
 
-void Game::updateButton(Button* button, int forceState)
+void Game::updateEventButton(Button* button, int changeState)
 {
-	if (forceState > 0) //if forcestate isn't default (0) we force the texture to a specific value
-	{
-		button->state = forceState;
-		button->updateTexture();
-	}
-	else if (button->buttonbounds.contains(mousePos))
+	if (button->buttonbounds.contains(mousePos))
 	{
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			//std::cout << "State 2 \n";
-			button->state = 2;
-			if(button == solve) gamestate = 2;
+			button->updateButton(2);
+			if (button == solve) gamestate = 2;
+			return;
 		}
-		else
-		{
-			//std::cout << "State 1 \n";
-			button->state = 1;
-		}
+		button->updateButton(1);
+		return;
 	}
-	else button->state = 0;
-	button->updateTexture();
+	button->updateButton(0);
 }
 
 Game::~Game()

@@ -47,7 +47,26 @@ void Button::updateTexture()
 	}
 }
 
-void Button::updateNumber(int nr)
+
+void Button::setText(int nr)
 {
 	text.setString(std::to_string(nr));
+}
+
+void Button::lockToggle()
+{
+
+	changeable = !changeable;
+}
+
+void Button::updateButton(int changeState, int nr)
+{//gets a state, changes the state of the button
+	//calls updateTexture
+	if (changeable)
+	{
+		if (nr != INT_MIN)
+			state = changeState;
+
+		updateTexture();
+	}
 }

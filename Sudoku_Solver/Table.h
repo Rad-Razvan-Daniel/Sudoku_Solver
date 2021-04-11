@@ -3,7 +3,12 @@
 class Table
 {
 	void initTable();
+
 public:
+	bool isSafe(int row, int col, int val);
+	bool isSafeRowCol(int row, int col, int val);
+	bool isSafeBox(int boxStartRow, int boxStartCol, int val);
+	bool emptyBoxes(int& row, int& col);
 	int table[9][9] = { { 3, 0, 6, 5, 0, 8, 4, 0, 0 },
 					   { 5, 2, 0, 0, 0, 0, 0, 0, 0 },
 					   { 0, 8, 7, 0, 0, 0, 0, 3, 1 },
@@ -18,7 +23,4 @@ public:
 	Table();
 	~Table();
 	void printTable();
-
-	bool isValid(const int line, const int column, const int val);
-	bool consoleSolve(int line = 0, int column = 0);
 };

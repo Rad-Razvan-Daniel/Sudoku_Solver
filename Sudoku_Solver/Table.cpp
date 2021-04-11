@@ -1,9 +1,10 @@
 #include "Table.h"
+#include "Button.h"
 Table::Table()
 {
 	//initTable();
 }
-Table::~Table() 
+Table::~Table()
 {
 	//delete[] table[];
 }
@@ -26,22 +27,37 @@ void Table::initTable()
 			table[i][j] = 0;
 }
 
-bool Table::isValid(const int line, const int column, int val) //checks if one of the numbers is compatible with the row, column and its box
+bool Table::isSafe(int row, int col, int val)
 {
-	//check row
-	for (int i = 0; i < 8; i++)
-		if (table[line][i] == val) return false;
-
-	//check column
-	for (int i = 0; i < 8; i++)
-		if (table[i][column] == val) return false;
-
-	//check box
-	int x = line - line % 3; //lets say line is 8. line%8 = 2. 8-2 = 6 ; starting from the row 6 we can play around with [6],[7],[8]
-	int y = column - column % 3;
-	for (int i = 0; i < 3; i++)
-		for (int ii = 0; ii < 3; ii++)
-			if (table[i + x][ii + y] == val)return false;
-
-	return true;
+	return    !isSafeRowCol(row, col, val)
+		&& !isSafeBox(row - row % 3, col - col % 3, val)
+		&& table[row][col] == 0;
+}
+bool Table::isSafeRowCol(int row, int col, int val)
+{
+	std::cout << "trying " << row << " " << col << std::endl;
+	//row 
+	for (int col = 0; col < 9; col++)
+		if (table[row][col] == val)
+			return true;
+	//col
+	for (int row = 0; row < 9; row++)
+		if (table[row][col] == val)
+			return true;
+	return false;
+}
+bool Table::isSafeBox(int boxStartRow, int boxStartCol, int val)
+{
+	for (int row = 0; row < 3; row++)
+		for (int col = 0; col < 3; col++)
+			if (table[row + boxStartRow][col + boxStartCol] == val)
+				return true;
+	return false;
+}
+bool Table::emptyBoxes(int& row, int& col)
+{
+	for (row = 0; row < 9; row++)
+		for (col = 0; col < 9; col++)
+			if (table[row][col] == 0) return true;
+	return false;
 }

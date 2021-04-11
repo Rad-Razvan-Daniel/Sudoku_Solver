@@ -9,17 +9,19 @@ class Button
 	//unless we load the path after we add the identifier before the texture
 
 	sf::Font* font = NULL;
-
-public:
 	sf::Texture* texture = NULL;
 	sf::Texture* hover_texture = NULL;
 	sf::Texture* active_texture = NULL;
+	int state = 0;
+	bool changeable = true;
+	void updateTexture(); //according to the set state, changes texture
+	void setText(int nr); //according to the number given, changes the text.stirng
+public:
 	Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, int width, int height);
-
 	sf::Text text;
 	sf::RectangleShape button;
-	int state = 0;
 	sf::IntRect buttonbounds;
-	void updateTexture();
-	void updateNumber(int nr);
+	void lockToggle();
+	void updateButton(int changeState = 0, int nr = INT_MIN); 
+
 };
