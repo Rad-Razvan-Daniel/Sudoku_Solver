@@ -18,7 +18,7 @@ Game::Game()
 void Game::mainLoop()
 {
 	initMisc(0);
-	initUI(0); //Table, Buttons
+	initUI(0); 
 
 	while (window->isOpen())
 	{
