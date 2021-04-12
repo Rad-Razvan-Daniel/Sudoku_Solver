@@ -9,14 +9,28 @@
 class Game
 {
 //GAME
+	enum gamestates{
+		_INTRO,
+		_MAIN,
+		_SOLVING,
+		_GENERATING,
+		_SETTINGS,
+	};
+	enum buttons{
+		_play_,
+		_settings_,
+		_generate_,
+		_solve_,
+		_box_
+		
+	};
 	void initWindow();
-	void initMisc(int gamestate);
+	void initMisc(); //checks state
 	void initFont();
-	void initUI(int gamestate);
-	void initTable();
+	void initState(); //checks state
 	//LOGIC
 
-	void update(int gamestate = 1);
+	void update(); //calls updating for every element manually added
 	void updateEvents();
 	sf::Event event;
 
@@ -31,18 +45,20 @@ class Game
 
 	void render();
 	void renderTextures();
-	void renderMisc(int gamestate);
+	void renderMisc();
 
 //BUTTONS
 	Button* solve;
 	Button* generate;
 	Button* play;
 	Button* settings;
+	std::vector<std::vector<Button>> boxes;
 	std::vector<std::vector<Button>> buttons;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
 	sf::Texture* hover;
 	sf::Texture* active;
+
 	sf::Texture* box;
 	sf::Texture* hover_box;
 	sf::Texture* active_box;

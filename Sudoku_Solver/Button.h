@@ -17,7 +17,8 @@ class Button
 	void updateTexture(); //according to the set state, changes texture
 	void setText(int nr); //according to the number given, changes the text.stirng
 public:
-	Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height);
+	int id;
+	Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height, int id = -1);
 	sf::Text text;
 	sf::RectangleShape button;
 	sf::IntRect buttonbounds;

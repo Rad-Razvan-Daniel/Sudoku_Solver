@@ -1,13 +1,27 @@
 #include "Button.h"
 #include <iostream>
-Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height)
+Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height,int id)
 {
-	sf::Font* tempfont = new sf::Font;
-	font = tempfont;
-	font->loadFromFile("font.ttf");
+#pragma region
+	this->font = font;
+	texture = def;
+	hover_texture = hover;
+	active_texture = active;
+
+	button.setSize(sf::Vector2f(width, height));
+	button.setTexture(texture);
+	button.setPosition(x, y);
+
+	this->id = id;
+	buttonbounds.left = x;
+	buttonbounds.top = y;
+	buttonbounds.height = height;
+	buttonbounds.width = width;
+#pragma endregion
 
 	text.setFont(*font);
 	text.setString(str);
+
 	//TODO: center the text within the box using the getGlobalPosition
 	//we move the text by x to the right, to accomodate for the offset
 	//
@@ -19,18 +33,6 @@ Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* h
 	else text.setPosition(x + 10, y + 10);
 	text.setFillColor(sf::Color::Black);
 
-	texture = def;
-	hover_texture = hover;
-	active_texture = active;
-
-	button.setSize(sf::Vector2f(width, height));
-	button.setTexture(texture);
-	button.setPosition(x, y);
-
-	buttonbounds.left = x;
-	buttonbounds.top = y;
-	buttonbounds.height = height;
-	buttonbounds.width = width;
 }
 void Button::updateTexture()
 {
@@ -38,6 +40,7 @@ void Button::updateTexture()
 	{
 	case 1: // hover
 		button.setTexture(hover_texture);
+
 		break;
 	case 2: //active
 		button.setTexture(active_texture);

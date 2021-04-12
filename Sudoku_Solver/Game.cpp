@@ -1,14 +1,9 @@
 #include "Game.h"
-enum {
-	_Intro,
-	_Main,
-	_Solving,
-	_Generating,
-	_Settings
-};
+
+
 Game::Game()
 {
-	std::cout << "intro" << _Intro;
+	std::cout << "intro" << _INTRO;
 	initWindow();
 	initFont();
 	pushSprite("background.jpg");
@@ -17,41 +12,37 @@ Game::Game()
 
 void Game::mainLoop()
 {
-	initMisc(0);
-	initUI(0); 
+	//initMisc();
+	initState();
 
 	while (window->isOpen())
 	{
 		switch (gamestate)
 		{
-		case  _Intro:
-			update(0);
-			render();
-			
-			break;
-		case _Main:
+		case _INTRO:
+		case _MAIN:
 
 			update();
 			render();
 			break;
-		case _Solving:
-			solve->updateButton(2);
+		case _SOLVING:
+			buttons[gamestate][_solve_].updateButton(2);
 
 			solve->lockToggle();
 
-			solvingAlgorithmLoop(sudoku->table);
-			solve->lockToggle();
-			solvingAlgorithmAnimation(sudoku->table);
-			
+solvingAlgorithmLoop(sudoku->table);
+solve->lockToggle();
+solvingAlgorithmAnimation(sudoku->table);
+gamestate--;
+break;
+
+
+		case _GENERATING:
 
 			update();
 			render();
-			gamestate--;
 			break;
-
 		}
-
-
 	}
 }
 
@@ -81,74 +72,83 @@ void Game::initWindow()
 	window->setVerticalSyncEnabled(vsync);
 }
 
-void Game::initMisc(int gamestate)
+void Game::initMisc()
 {
 	switch (gamestate)
 	{
-	case _Intro:
+	case _INTRO:
+
+
+		break;
+	case _MAIN:
+
+
+		break;
+
+	}
+
+}
+
+void Game::initState()
+{
+
+	std::vector<Button> x;
+	switch (gamestate)
+	{
+	case _INTRO:
+
+		active = makeTexture("active_image.jpg");
 		def = makeTexture("image.jpg");
 		hover = makeTexture("hover_image.jpg");
 
-		box = makeTexture("box.png");
+		box = makeTexture("box.jpg");
 		hover_box = makeTexture("hover_box.jpg");
-
-		break;
-	case _Main:
-		initTable(); //back end algorithm
-		active = makeTexture("active_image.jpg");
-
-		box = makeTexture("box.png");
 		active_box = makeTexture("active_box.jpg");
-		hover_box = makeTexture("hover_box.jpg");
+
+
+
+		play = new Button("play", font, def, hover, active, 280, 300, 150, 50, _play_);
+
+		settings = new Button("stgs", font, box, hover_box, hover_box, 250, 355, 50, 50, _settings_);
+
+		buttons.push_back(x);
+		buttons[gamestate].push_back(*play);
+		buttons[gamestate].push_back(*settings);
+
 		break;
-
-	}
-
-}
-
-void Game::initFont()
-{
-	sf::Font* temp = new sf::Font;
-	temp->loadFromFile("font.ttf");
-	font = temp;
-}
-
-void Game::initUI(int gamestate)
-{
-	switch (gamestate)
-	{
-	case _Intro:
-
-		play = new Button("play", font, def, hover, hover, 280, 300, 150, 50);
-		settings = new Button(" ", font, box,hover_box,hover_box, 250,355,50,50);
-		break;
-	case _Main:
-		solve = new Button("solve", font, def, hover, active, 300, 20, 150, 50);
-		generate = new Button("generate", font, def, hover, active, 100, 20, 150, 50);
-
-		std::vector<Button> x;
+	case _MAIN:
 		for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
 		{
-			buttons.push_back(x);
+			std::cout << "boxes.size = " << boxes.size();
+
+			std::vector<Button> y;
+			boxes.push_back(y);
+
 			for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
 			{
-				Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]), font, box, hover_box, active_box, xoffset, 105 + yoffset, 50, 50);
-				buttons[j].push_back(*btn);
+				//						                |we set the number of the string. If it's 0 we set string to ""         |
+
+				std::string tenmpstr;
+				if (&sudoku->table[j][i] == 0)
+				{
+					tenmpstr = "";
+				}
+				else
+				{
+					tenmpstr = std::to_string(&sudoku->table[j][i]);
+				}
+				Button* btn = new Button(tenmpstr,
+					font, box, hover_box, active_box, xoffset, 105 + yoffset, 50, 50, _box_);
+
+				std::cout << "created button. \n";
+				boxes[j].push_back(*btn);
 			}
 		}
-		break;
+		solve = new Button("solve", font, def, hover, active, 300, 20, 150, 50, _solve_);
+		generate = new Button("generate", font, def, hover, active, 100, 20, 150, 50, _generate_);
+
+
 	}
-	//string, font,path,path,path,x,y,width,height
-
-}
-
-void Game::initTable()
-{
-	sudoku = new Table();
-	for (int j = 0; j < 9; j++)
-		for (int i = 0; i < 9; i++)
-			if (sudoku->table[j][i] != 0)
-				sudoku->validityTable[j][i];
 
 }
 
@@ -165,17 +165,17 @@ bool Game::solvingAlgorithmLoop(int table[9][9]) //returns if it's solved or not
 	{
 		if (sudoku->isSafe(row, col, val))
 		{
-			buttons[row][col].updateButton(1, val);
-			buttons[row][col].lockToggle();
+			boxes[row][col].updateButton(1, val);
+			boxes[row][col].lockToggle();
 			table[row][col] = val;
 
 
 			if (solvingAlgorithmLoop(table))
 				return true;
-			buttons[row][col].lockToggle();
+			boxes[row][col].lockToggle();
 			//tru again!
 			table[row][col] = 0;
-			buttons[row][col].updateButton(0, 0);
+			boxes[row][col].updateButton(0, 0);
 
 		}
 	}
@@ -190,11 +190,11 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			if (buttons[j][i].isLockOn())
+			if (boxes[j][i].isLockOn())
 			{
 				count++;
-				buttons[j][i].lockToggle();
-				buttons[i][j].updateButton(0);
+				boxes[j][i].lockToggle();
+				boxes[i][j].updateButton(0);
 			}
 			update();
 			render();
@@ -204,29 +204,26 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 }
 
 
-void Game::update(int gamestate)
+void Game::update()
 {
 	updateEvents();
-	switch (gamestate)
+
+	for (int i = 0; i < buttons[gamestate].size(); i++)
 	{
-	case 0:
+		updateEventButton(&buttons[gamestate][i]);
+	}
 
-		updateEventButton(play);
-		updateEventButton(settings);
-		break;
-	case 1:
-
-		updateEventButton(solve);
-		updateEventButton(generate);
+	if (gamestate != _INTRO)
+	{
 		for (int j = 0; j < 9; j++) //col iter
 		{
 			for (int i = 0; i < 9; i++)
 			{
-				updateEventButton(&buttons[j][i]);
+				updateEventButton(&boxes[j][i]);
 			}
 		}
-		break;
 	}
+
 
 
 }
@@ -242,7 +239,8 @@ void Game::updateEvents()
 
 		case sf::Event::KeyPressed:
 			if (event.key.code == sf::Keyboard::Escape)
-			window->close();
+				if (gamestate == _MAIN) gamestate = _INTRO;
+				else if (gamestate == _INTRO) gamestate = _MAIN;
 			break;
 
 		case sf::Event::MouseMoved:
@@ -262,23 +260,29 @@ void Game::updateEventButton(Button* button, int changeState)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			button->updateButton(2);
-			if (button == solve)
+			switch (button->id)
 			{
+			case _solve_:
+
 				std::cout << "entered gamestate 2";
 				gamestate = 2;
-			}
-			if (button == generate)
-			{
+				break;
+			case _generate_:
+
 				std::cout << "entered gamestate 3";
 				gamestate = 3;
-			}
-			if (button == play)
-			{
+				break;
+			case _play_:
+
 				gamestate = 1;
-				initMisc(1); initUI(1);
+				initMisc(); initState();
+				break;
+			case _box_:
+				std::cout << "pressed a box\n";
 			}
 			return;
 		}
+		std::cout << "hovering";
 		button->updateButton(1);
 		return;
 	}
@@ -289,24 +293,15 @@ void Game::updateEventButton(Button* button, int changeState)
 
 void Game::render()
 {
+
 	sf::Color bgcol(245, 243, 194);
 	//remember to add button to the vector of printable stuff before you try to print it
 	window->clear(bgcol);
 	//draws everything except interractables.
 	renderTextures();
-	switch (gamestate)
-	{
-	case 0:
-		renderMisc(0);
-		break;
-	case 1:
-		renderMisc(1);
-		break;
-	case 2:
-		renderMisc(2);
-	}
-	//draws buttons
-	
+	renderMisc();
+	//draws boxes
+
 
 	window->display();
 }
@@ -322,34 +317,23 @@ void Game::renderTextures()
 	}
 }
 
-void Game::renderMisc(int gamestate)
+void Game::renderMisc()
 {
-	switch (gamestate)
+	for (int i = 0; i < buttons[gamestate].size(); i++)
 	{
+		drawButton(buttons[gamestate][i]);
+	}
 
-	case 0:
-
-		drawButton(*play);
-		drawButton(*settings);
-		break;
-	case 1:
-		drawButton(*generate);
-	case 2:
-		drawButton(*solve);
+	if (gamestate == _MAIN)
 		for (int j = 0; j < 9; j++) //col iter
 		{
 			for (int i = 0; i < 9; i++)
 			{
-				drawButton(buttons[j][i]);
+				drawButton(boxes[j][i]);
 			}
 		}
-		break;
-
-
-	}
-
-
 }
+
 
 void Game::drawButton(Button button)
 {
@@ -390,4 +374,11 @@ size_t Game::pushSprite(const std::string& PATH)
 void Game::popSprite()
 {
 	textures.pop_back();
+}
+
+void Game::initFont()
+{
+	sf::Font* temp = new sf::Font;
+	temp->loadFromFile("Resources\\Fonts\\font.ttf");
+	font = temp;
 }
