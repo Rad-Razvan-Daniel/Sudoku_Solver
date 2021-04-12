@@ -21,9 +21,11 @@ class Game
 		_settings_,
 		_generate_,
 		_solve_,
-		_box_
+		_box_,
+		_unknown_
 		
 	};
+	bool wasinit[10];
 	void initWindow();
 	void initMisc(); //checks state
 	void initFont();
@@ -48,11 +50,13 @@ class Game
 	void renderMisc();
 	//when given an id, we go to index[id] and return the actual position
 	int index[10] = { 0,0,0,0,0,0,0,0,0,0};
+	int textureIndex[4];
 //BUTTONS
 	Button* solve;
 	Button* generate;
 	Button* play;
 	Button* settings;
+	Button* unknown;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
 	sf::Texture* hover;

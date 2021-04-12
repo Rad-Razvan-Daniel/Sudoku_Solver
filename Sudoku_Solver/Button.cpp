@@ -22,9 +22,9 @@ Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* h
 	//we estmate the text length. we substract that from the total length.
 	if (def->getSize().x > 100)
 	{
-		text.setPosition(x + str.length() * 10, y + 10);
+		text.setPosition(x+30, y + 10);
 	}
-	else text.setPosition(x + 10, y + 10);
+	else text.setPosition(x + 15, y + 5);
 	text.setFillColor(sf::Color::Black);
 
 }
