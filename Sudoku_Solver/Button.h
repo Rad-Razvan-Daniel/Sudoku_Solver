@@ -21,9 +21,10 @@ public:
 	Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height, int id = -1);
 	sf::Text text;
 	sf::RectangleShape button;
-	sf::IntRect buttonbounds;
+	sf::IntRect* bounds;
 	void lockToggle();
 	bool isLockOn();
+	bool checkBounds(sf::Vector2i);
 	void updateButton(int changeState = 0, int nr = INT_MIN); 
 
 };

@@ -2,7 +2,6 @@
 #include <iostream>
 Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height,int id)
 {
-#pragma region
 	this->font = font;
 	texture = def;
 	hover_texture = hover;
@@ -11,13 +10,8 @@ Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* h
 	button.setSize(sf::Vector2f(width, height));
 	button.setTexture(texture);
 	button.setPosition(x, y);
-
+	bounds = new sf::IntRect(x, y, width, height);
 	this->id = id;
-	buttonbounds.left = x;
-	buttonbounds.top = y;
-	buttonbounds.height = height;
-	buttonbounds.width = width;
-#pragma endregion
 
 	text.setFont(*font);
 	text.setString(str);
@@ -68,6 +62,10 @@ void Button::lockToggle()
 bool Button::isLockOn()
 {
 	return !changeable;
+}
+bool  Button::checkBounds(sf::Vector2i v2i)
+{
+	return bounds->contains(v2i);
 }
 void Button::updateButton(int changeState, int nr)
 {

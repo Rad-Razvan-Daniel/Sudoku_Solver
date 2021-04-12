@@ -46,14 +46,13 @@ class Game
 	void render();
 	void renderTextures();
 	void renderMisc();
-
+	//when given an id, we go to index[id] and return the actual position
+	int index[10] = { 0,0,0,0,0,0,0,0,0,0};
 //BUTTONS
 	Button* solve;
 	Button* generate;
 	Button* play;
 	Button* settings;
-	std::vector<std::vector<Button>> boxes;
-	std::vector<std::vector<Button>> buttons;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
 	sf::Texture* hover;
@@ -66,18 +65,23 @@ class Game
 	sf::Vector2i mousePos;
 	//Rendering
 	void drawButton(Button button);
-	void updateEventButton(Button* button, int state = 0);
 	sf::Texture* makeTexture(std::string PATH);
 //TABLE
 	Table* sudoku;
+	Button* makeButton(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height, int id);
 	bool solvingAlgorithmLoop(int table[9][9]);
 
 	void solvingAlgorithmAnimation(int table[9][9]);
-
+	void updateButton(int identifier = INT_MIN, int changeState = 0, int nr = INT_MIN);
 public:
+
+	void updateEventButton(Button* button, int state = 0); //can change gamestate
+	std::vector<std::vector<Button>> boxes;
+	std::vector<std::vector<Button>> buttons;
 	int gamestate = 0;
 	sf::RenderWindow* window = nullptr;
 	void mainLoop();
+	void initTable();
 	Game();
 	~Game();
 };
