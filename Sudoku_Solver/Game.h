@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Button.h"
 #include <iostream>
+#include "SFML/Audio.hpp"
 #include <string>
 class Game
 {
@@ -23,7 +24,7 @@ class Game
 		_solve_,
 		_box_,
 		_unknown_
-		
+
 	};
 	bool wasinit[10];
 	void initWindow();
@@ -77,6 +78,9 @@ class Game
 
 	void solvingAlgorithmAnimation(int table[9][9]);
 	void updateButton(int identifier = INT_MIN, int changeState = 0, int nr = INT_MIN);
+	sf::SoundBuffer buffer;
+	sf::Music music;
+	sf::Sound sound;
 public:
 
 	void updateEventButton(Button* button, int state = 0); //can change gamestate

@@ -12,7 +12,7 @@ Game::Game()
 
 void Game::mainLoop()
 {
-	//initMisc();
+	initMisc();
 	initState();
 
 	while (window->isOpen())
@@ -98,6 +98,12 @@ void Game::initMisc()
 	switch (gamestate)
 	{
 	case _INTRO:
+		music.openFromFile("Resources\\Sounds\\music.wav");
+		music.play();
+
+		buffer.loadFromFile("Resources\\Sounds\\sound.ogg");
+		sound.setBuffer(buffer);
+		
 		break;
 
 
@@ -325,6 +331,8 @@ void Game::updateEventButton(Button* button, int changeState)
 				break;
 
 			case _play_: //change of menu
+				sound.play();
+				std::cout << "played sound";
 				gamestate = _MAIN;
 				initMisc(); initState();
 				break;
