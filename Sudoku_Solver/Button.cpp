@@ -1,6 +1,7 @@
 #include "Button.h"
 #include <iostream>
-Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height,int id)
+Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active,
+	float x, float y, float width, float height, int id) :BaseObject(x,y,width,height, id)
 {
 	this->font = font;
 	texture = def;
@@ -10,8 +11,6 @@ Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* h
 	button.setSize(sf::Vector2f(width, height));
 	button.setTexture(texture);
 	button.setPosition(x, y);
-	bounds = new sf::IntRect(x, y, width, height);
-	this->id = id;
 
 	text.setFont(*font);
 	text.setString(str);
@@ -63,10 +62,7 @@ bool Button::isLockOn()
 {
 	return !changeable;
 }
-bool  Button::checkBounds(sf::Vector2i v2i)
-{
-	return bounds->contains(v2i);
-}
+
 void Button::updateButton(int changeState, int nr)
 {
 	if (changeable)

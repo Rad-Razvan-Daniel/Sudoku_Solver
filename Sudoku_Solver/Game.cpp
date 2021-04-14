@@ -238,7 +238,6 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 {
 	int count = 0;
 	for (int j = 0; j < 9; j++)
-	{
 		for (int i = 0; i < 9; i++)
 		{
 			if (boxes[j][i].isLockOn())
@@ -250,7 +249,7 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 			update();
 			render();
 		}
-	}
+	
 }
 
 
@@ -264,9 +263,8 @@ void Game::update()
 	if (gamestate == _MAIN || gamestate == _GENERATING || gamestate == _SOLVING)
 		for (int j = 0; j < 9; j++)
 			for (int i = 0; i < 9; i++)
-			{
 				updateEventButton(&boxes[j][i]);
-			}
+			
 
 }
 
@@ -308,13 +306,15 @@ void Game::updateEvents()
 	}
 }
 
-void Game::updateEventButton(Button* button, int changeState)
-{
+void Game::updateEventButton(Button* button, int changeState){
 
 	if (button->bounds->contains(mousePos))
 	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (sf::Event::MouseButtonReleased)
 		{
+			std::cout << "releaesd!\n";
+		}
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 			button->updateButton(2);
 			switch (button->id)
 			{
@@ -344,6 +344,7 @@ void Game::updateEventButton(Button* button, int changeState)
 			}
 			return;
 		}
+		//update as hover
 		button->updateButton(1);
 		return;
 	}

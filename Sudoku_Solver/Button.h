@@ -1,8 +1,9 @@
 #pragma once
 #include "Text.h"
+#include "BaseObject.h"
 #include "ButtonSprite.h"
 #include <string>
-class Button
+class Button:public BaseObject
 {
 	//the PATH will be <<image.jpg>>.  Resources\\Textures\\ will be added.
 	// i did this because I want to load in inactive_texture and we can't do that
@@ -17,14 +18,11 @@ class Button
 	void refreshTexture(); //according to the set state, changes texture
 	void setText(int nr); //according to the number given, changes the text.stirng
 public:
-	int id;
 	Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height, int id = -1);
 	sf::Text text;
 	sf::RectangleShape button;
-	sf::IntRect* bounds;
 	void lockToggle();
 	bool isLockOn();
-	bool checkBounds(sf::Vector2i);
 	void updateButton(int changeState = 0, int nr = INT_MIN); 
 
 };
