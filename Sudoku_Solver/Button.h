@@ -14,7 +14,7 @@ class Button
 	sf::Texture* active_texture = NULL;
 	int state = 0;
 	bool changeable = true;
-	void updateTexture(); //according to the set state, changes texture
+	void refreshTexture(); //according to the set state, changes texture
 	void setText(int nr); //according to the number given, changes the text.stirng
 public:
 	int id;

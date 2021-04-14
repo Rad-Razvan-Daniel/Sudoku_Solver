@@ -359,15 +359,15 @@ void Game::render()
 	//remember to add button to the vector of printable stuff before you try to print it
 	window->clear(bgcol);
 	//draws everything except interractables.
-	renderTextures();
-	renderMisc();
+	renderSprites();
+	renderUIbuttons();
 	//draws boxes
 
 
 	window->display();
 }
 
-void Game::renderTextures()
+void Game::renderSprites()
 {
 	//this works like a stack.
 	//we add the textures to a vector and we draw them from front to back
@@ -376,23 +376,23 @@ void Game::renderTextures()
 
 	case _INTRO:
 		for (int i = 0; i < sprites.size(); i++)
-		{
-
 			window->draw(sprites[i]);
-		}
+		
 		break;
+
 	default:
 		window->draw(sprites[bg]);
 		for (int i = 0; i < sprites.size(); i++)
 		{
 			if (i == 1)continue;
-			window->draw(sprites[i]);
+			window->draw(sprites[i]);   
 		}
+		break;
 	}
 
 }
 
-void Game::renderMisc()
+void Game::renderUIbuttons()
 {
 	switch (gamestate)
 	{
@@ -403,29 +403,9 @@ void Game::renderMisc()
 
 		}
 		break;
-		std::cout << "hey";
-
-
-
 
 	case _SOLVING:
-		for (int j = 0; j < 9; j++) //col iter
-		{
-			for (int i = 0; i < 9; i++)
-			{
-				drawButton(boxes[j][i]);
-			}
-		}
-		break;
 	case _GENERATING:
-		for (int j = 0; j < 9; j++) //col iter
-		{
-			for (int i = 0; i < 9; i++)
-			{
-				drawButton(boxes[j][i]);
-			}
-		}
-		break;
 	case _MAIN:
 		for (int j = 0; j < 9; j++) //col iter
 		{
@@ -434,16 +414,16 @@ void Game::renderMisc()
 				drawButton(boxes[j][i]);
 			}
 		}
-		break;
-	}
-	if (!((gamestate == _INTRO) || (gamestate == _SETTINGS)))
 		for (int i = 0; i < buttons.size() - 1; i++)
 		{
 			drawButton(buttons[_MAIN][i]);
 		}
+		break;
 
-	//
-		//if (gamestate == _SOLVING || gamestate == _GENERATING) 
+	case _SETTINGS:
+		break;
+	}
+
 
 }
 

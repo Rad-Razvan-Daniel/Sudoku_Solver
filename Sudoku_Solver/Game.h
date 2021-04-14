@@ -47,8 +47,8 @@ class Game
 	void popSprite();
 
 	void render();
-	void renderTextures();
-	void renderMisc();
+	void renderSprites();
+	void renderUIbuttons();
 	//when given an id, we go to index[id] and return the actual position
 	int index[10] = { 0,0,0,0,0,0,0,0,0,0};
 	int textureIndex[4];

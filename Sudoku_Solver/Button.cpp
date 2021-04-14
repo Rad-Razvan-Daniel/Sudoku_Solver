@@ -28,7 +28,7 @@ Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* h
 	text.setFillColor(sf::Color::Black);
 
 }
-void Button::updateTexture()
+void Button::refreshTexture()
 {
 	switch (state)
 	{
@@ -74,6 +74,6 @@ void Button::updateButton(int changeState, int nr)
 		if (nr != INT_MIN)
 			setText(nr);
 		state = changeState;
-		updateTexture();
+		refreshTexture();
 	}
 }
