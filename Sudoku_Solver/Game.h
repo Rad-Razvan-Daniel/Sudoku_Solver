@@ -56,7 +56,7 @@ class Game
 	Button* solve;
 	Button* generate;
 	Button* play;
-	Button* settings;
+	Button* settings; 
 	Button* unknown;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
