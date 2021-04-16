@@ -1,5 +1,5 @@
 #pragma once
-#include "Text.h"
+//#include "Text.h"
 #include "ButtonSprite.h"
 #include <string>
 class Button

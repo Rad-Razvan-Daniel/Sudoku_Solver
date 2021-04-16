@@ -3,10 +3,9 @@
 Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height)
 {
 	sf::Font* tempfont = new sf::Font;
-	font = tempfont;
-	font->loadFromFile("font.ttf");
+	tempfont = font;
 
-	text.setFont(*font);
+	text.setFont(*tempfont);
 	text.setString(str);
 	//TODO: center the text within the box using the getGlobalPosition
 	//we move the text by x to the right, to accomodate for the offset
@@ -14,9 +13,9 @@ Button::Button(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* h
 	//we estmate the text length. we substract that from the total length.
 	if (def->getSize().x > 100)
 	{
-		text.setPosition(x + str.length() * 10, y + 10);
+		text.setPosition(x + 15, y + 10);
 	}
-	else text.setPosition(x + 10, y + 10);
+	else text.setPosition(x + 15, y + 5);
 	text.setFillColor(sf::Color::Black);
 
 	texture = def;

@@ -157,7 +157,6 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sudoku_Solver.cpp" />
     <ClCompile Include="Table.cpp" />
-    <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -165,7 +164,6 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Table.h" />
-    <ClInclude Include="Text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

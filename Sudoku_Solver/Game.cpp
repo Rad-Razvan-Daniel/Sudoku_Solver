@@ -40,7 +40,7 @@ void Game::initWindow()
 {
 	//given initial values in case we can't open settings
 	int vsync = 0;
-	int height = 800,
+	int height = 600,
 		width = 600,
 		frame_limit = 30;
 
@@ -57,7 +57,7 @@ void Game::initWindow()
 		read.close();
 	}
 
-	window = new sf::RenderWindow(sf::VideoMode(800, 600), x);
+	window = new sf::RenderWindow(sf::VideoMode(width,height), x);
 	window->setFramerateLimit(frame_limit);
 	window->setVerticalSyncEnabled(vsync);
 }
@@ -65,7 +65,7 @@ void Game::initWindow()
 void Game::initMisc()
 {
 	sf::Font* temp = new sf::Font;
-	temp->loadFromFile("Resources\\font.ttf");
+	temp->loadFromFile("Resources\\Fonts\\font.ttf");
 
 
 	font = temp;
@@ -83,7 +83,7 @@ void Game::initUI()
 
 	//string, font,path,path,path,x,y,width,height
 	solve = new Button("solve", font, def, hover, active, 300, 20, 150, 50);
-	play = new Button("play", font, def, hover, active, 100, 20, 150, 50);
+	generate = new Button("generate", font, def, hover, active, 100, 20, 150, 50);
 	std::vector<Button> x;
 
 	for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
@@ -163,22 +163,23 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 void Game::update()
 {
 	updateEvents();
-	updateEventButton(play);
-	updateEventButton(solve);
 
-	for (int j = 0; j < 9; j++) //col iter
-	{
-		for (int i = 0; i < 9; i++)
-		{
-			updateEventButton(&buttons[j][i]);
-		}
-	}
 }
 
 void Game::updateEvents()
 {
 	while (window->pollEvent(event))
 	{
+		updateEventButton(generate);
+		updateEventButton(solve);
+
+		for (int j = 0; j < 9; j++) //col iter
+		{
+			for (int i = 0; i < 9; i++)
+			{
+				updateEventButton(&buttons[j][i]);
+			}
+		}
 		switch (event.type)
 		{
 		case sf::Event::Closed:
@@ -249,7 +250,7 @@ void Game::renderTextures()
 void Game::renderMisc()
 {
 	drawButton(*solve);
-	drawButton(*play);
+	drawButton(*generate);
 
 	for (int j = 0; j < 9; j++) //col iter
 	{

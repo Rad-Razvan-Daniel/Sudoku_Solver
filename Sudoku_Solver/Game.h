@@ -34,12 +34,13 @@ class Game
 
 //BUTTONS
 	Button* solve;
-	Button* play;
+	Button* generate;
 	std::vector<std::vector<Button>> buttons;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
 	sf::Texture* hover;
 	sf::Texture* active;
+
 	sf::Texture* box;
 	sf::Texture* hover_box;
 	sf::Texture* active_box;
