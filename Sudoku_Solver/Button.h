@@ -5,6 +5,7 @@
 #include "ButtonSprite.h"
 #include <string>
 #include <iostream>
+#include "enums.h"
 class Button:public BaseObject,public Text
 {
 	//the PATH will be <<image.jpg>>.  Resources\\Textures\\ will be added.

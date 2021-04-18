@@ -7,25 +7,11 @@
 #include <iostream>
 #include "SFML/Audio.hpp"
 #include <string>
+#include "enums.h"
 class Game
 {
 //GAME
-	enum gamestates{
-		_INTRO,
-		_MAIN,
-		_SOLVING,
-		_GENERATING,
-		_SETTINGS,
-	};
-	enum buttons{
-		_play_,
-		_settings_,
-		_generate_,
-		_solve_,
-		_box_,
-		_unknown_
 
-	};
 	bool wasinit[10];
 	void initWindow();
 	void initMisc(); //checks state
@@ -81,9 +67,11 @@ class Game
 	sf::SoundBuffer buffer;
 	sf::Music music;
 	sf::Sound sound;
+	sf::SoundBuffer boxbuffer;
+	sf::Sound boxsound;
 public:
 
-	void updateEventButton(Button* button, int state = 0); //can change gamestate
+	void updateEventButton(Button* button); //can change gamestate
 	std::vector<std::vector<Button>> boxes;
 	std::vector<std::vector<Button>> buttons;
 	int gamestate = 0;

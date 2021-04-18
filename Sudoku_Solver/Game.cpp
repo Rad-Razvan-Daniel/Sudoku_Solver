@@ -1,9 +1,4 @@
 #include "Game.h"
-enum {
-	_default,
-	_hover,
-	_active
-};
 
 Game::Game()
 {
@@ -106,7 +101,7 @@ void Game::updateEvents()
 
 }
 
-void Game::updateEventButton(Button* button, int changeState) {
+void Game::updateEventButton(Button* button) {
 
 	if (button->bounds->contains(mousePos))
 	{
@@ -116,6 +111,7 @@ void Game::updateEventButton(Button* button, int changeState) {
 			{
 
 			case _solve_:
+				button->updateButton(2);
 				gamestate = _SOLVING;
 				break;
 
@@ -128,6 +124,7 @@ void Game::updateEventButton(Button* button, int changeState) {
 
 			case _play_: //change of menu
 				gamestate = _MAIN;
+				button->updateButton(2);
 				initMisc(); initState();
 				break;
 
@@ -202,7 +199,9 @@ void Game::initMisc()
 
 		buffer.loadFromFile("Resources\\Sounds\\sound.ogg");
 		sound.setBuffer(buffer);
-		
+
+		boxbuffer.loadFromFile("Resources\\Sounds\\boxsound.wav");
+		boxsound.setBuffer(boxbuffer);
 		break;
 
 
@@ -278,7 +277,7 @@ void Game::initState()
 				{
 					//						                |we set the number of the string. If it's 0 we set string to ""     
 					Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]),
-						font, box, hover_box, active_box,&sound, xoffset, 105 + yoffset, 50, 50, _box_);
+						font, box, hover_box, active_box,&boxsound, xoffset, 105 + yoffset, 50, 50, _box_);
 
 					boxes[j].push_back(*btn);
 

@@ -164,6 +164,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonSprite.h" />
+    <ClInclude Include="enums.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Table.h" />
