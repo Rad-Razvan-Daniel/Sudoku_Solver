@@ -1,12 +1,12 @@
 #pragma once
 #include <fstream>
 #include <vector>
-#include <iostream>
-#include <string>
-
 #include "Table.h"
 #include "Sprite.h"
 #include "Button.h"
+#include <iostream>
+#include "SFML/Audio.hpp"
+#include <string>
 #include "enums.h"
 class Game
 {
@@ -43,7 +43,7 @@ class Game
 	Button* generate;
 	Button* play;
 	Button* settings; 
-	Button* media;
+	Button* unknown;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* def;
 	sf::Texture* hover;
@@ -55,7 +55,7 @@ class Game
 
 	sf::Vector2i mousePos;
 	//Rendering
-	void drawObject(Button button);
+	void drawButton(Button button);
 	sf::Texture* makeTexture(std::string PATH);
 //TABLE
 	Table* sudoku;

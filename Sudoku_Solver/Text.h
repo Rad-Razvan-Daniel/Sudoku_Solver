@@ -5,9 +5,10 @@ class Text
 protected:
 
 	sf::Font* font = NULL;
+
 	int x = 0, y = 0;
 	sf::Text text;
 	Text(std::string str,sf::Font* tempfont);
 public:
-	const sf::Text getText();
+	sf::Text getText();
 };

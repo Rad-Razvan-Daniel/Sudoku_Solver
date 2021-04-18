@@ -6,9 +6,10 @@ Text::Text(std::string str, sf::Font* tempfont)
 	this->text.setFont(*tempfont);
 	this->text.setString(str);
 	text.setFillColor(sf::Color::Black);
+	printf("made ");
 }
 
-const sf::Text Text::getText()
+sf::Text Text::getText()
 {
 	return text;
 }

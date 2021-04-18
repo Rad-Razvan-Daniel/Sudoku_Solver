@@ -10,7 +10,6 @@ enum gamestates {
 	_SOLVING,
 	_GENERATING,
 	_SETTINGS,
-	_MEDIA
 };
 enum buttons {//ID's
 	_play_,
@@ -18,6 +17,6 @@ enum buttons {//ID's
 	_generate_,
 	_solve_,
 	_box_,
-	_media_
+	_unknown_
 
 };
