@@ -7,23 +7,22 @@ Game::Game()
 	textureIndex[0] = pushSprite("background.jpg");
 	textureIndex[1] = pushSprite("introBackground.jpg");
 	sprites[1].setScale(4, 4);
+
+	initState();
 }
 
 void Game::mainLoop()
 {
-	initMisc();
-	initState();
-
-	while (window->isOpen())
-	{
-		while (window->pollEvent(event))
-		{
+	while (window->isOpen()){
+		while (window->pollEvent(event)){
 
 			switch (gamestate)
 			{
 			case _INTRO:
 			case _MAIN:
 				break;
+
+
 			case _SOLVING:
 				//change state to active
 				updateButton(_solve_, 2);
@@ -39,6 +38,8 @@ void Game::mainLoop()
 
 			case _GENERATING:
 				break;
+
+
 			case _SETTINGS:
 				break;
 			}
@@ -52,17 +53,20 @@ void Game::mainLoop()
 void Game::update()
 {
 	updateEvents();
-	
 
-		for (int i = 0; i < buttons[gamestate].size(); i++)
-			updateEventButton(&buttons[gamestate][i]);
 
-		if (gamestate == _MAIN || gamestate == _GENERATING || gamestate == _SOLVING)
-			for (int j = 0; j < 9; j++)
-				for (int i = 0; i < 9; i++)
-					updateEventButton(&boxes[j][i]);
-	
+	for (int i = 0; i < buttons[gamestate].size(); i++)
+		updateEventButton(&buttons[gamestate][i]);
 
+	if (gamestate == _MAIN || gamestate == _GENERATING || gamestate == _SOLVING)
+		for (int j = 0; j < 9; j++)
+			for (int i = 0; i < 9; i++)
+				updateEventButton(&boxes[j][i]);
+
+	if (gamestate == _MEDIA)
+	{
+
+	}
 }
 
 void Game::updateEvents()
@@ -82,12 +86,11 @@ void Game::updateEvents()
 			if (gamestate == _INTRO)
 			{
 				gamestate = _MAIN;
-				initMisc(); initState();
+				initState();
 			}
 			else if (gamestate == _MAIN)
-			{
 				gamestate = _SOLVING;
-			}
+			
 		break;
 
 
@@ -105,7 +108,7 @@ void Game::updateEventButton(Button* button) {
 
 	if (button->bounds->contains(mousePos))
 	{
-		 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			button->updateButton(_active);
 			switch (button->id)
 			{
@@ -125,12 +128,12 @@ void Game::updateEventButton(Button* button) {
 			case _play_: //change of menu
 				gamestate = _MAIN;
 				button->updateButton(2);
-				initMisc(); initState();
+				initState();
 				break;
 
 			case _settings_: //change of menu
 				gamestate = _SETTINGS;
-				initMisc(); initState();
+				initState();
 				break;
 			}
 			return;
@@ -162,14 +165,13 @@ void Game::initWindow()
 {
 	//given initial values in case we can't open settings
 
-	int vsync,height, width, frame_limit;
+	int vsync, height, width, frame_limit;
 	//open settings and read parameters
 	std::ifstream read;
 	read.open("Resources\\settings.txt");
 	std::string x = "Solver";
 	if (read.is_open())
 	{
-		std::cout << "read settings from file\n";
 		read >> width >> height;
 		read >> frame_limit;
 		read >> vsync;
@@ -178,9 +180,9 @@ void Game::initWindow()
 	}
 	else
 	{
-		 vsync = 0;
-		 height = 800,
-			width = 600,
+		vsync = 0;
+		height = 600,
+			width = 560,
 			frame_limit = 30;
 	}
 
@@ -194,7 +196,17 @@ void Game::initMisc()
 	switch (gamestate)
 	{
 	case _INTRO:
-		music.openFromFile("Resources\\Sounds\\music.wav");
+
+		active = makeTexture("active_image.jpg");
+		def = makeTexture("image.jpg");
+		hover = makeTexture("hover_image.jpg");
+
+		box = makeTexture("box.jpg");
+		hover_box = makeTexture("hover_box.jpg");
+		active_box = makeTexture("active_box.jpg");
+
+
+		music.openFromFile("Resources\\Sounds\\music.ogg");
 		music.play();
 		music.setLoop(true);
 		music.setVolume(10);
@@ -202,6 +214,7 @@ void Game::initMisc()
 		buffer.loadFromFile("Resources\\Sounds\\sound.ogg");
 		buttonsound.setBuffer(buffer);
 		buttonsound.setVolume(20);
+
 		boxbuffer.loadFromFile("Resources\\Sounds\\boxsound.wav");
 		boxsound.setBuffer(boxbuffer);
 		break;
@@ -221,7 +234,7 @@ Button* Game::makeButton(std::string str, sf::Font* font, sf::Texture* def, sf::
 	{
 		//we have an ID. 
 		//this ID will be inputed into the index and 
-		Button* btn = new Button(str, font, def, hover, active,sound, x, y, width, height, id);
+		Button* btn = new Button(str, font, def, hover, active, sound, x, y, width, height, id);
 		buttons[gamestate].push_back(*btn);
 		index[id] = buttons[gamestate].size() - 1;
 
@@ -230,74 +243,57 @@ Button* Game::makeButton(std::string str, sf::Font* font, sf::Texture* def, sf::
 }
 void Game::initState()
 {
-
-	switch (gamestate)
+	if (!wasinit[gamestate])
 	{
-	case _INTRO:
-	{
-		if (!wasinit[gamestate])
+		initMisc();
+		switch (gamestate)
 		{
-			wasinit[gamestate] = !wasinit[gamestate];
-			active = makeTexture("active_image.jpg");
-			def = makeTexture("image.jpg");
-			hover = makeTexture("hover_image.jpg");
-
-			box = makeTexture("box.jpg");
-			hover_box = makeTexture("hover_box.jpg");
-			active_box = makeTexture("active_box.jpg");
-
-
-			//creez un boton nou
-			//ii dau assign la un pointer de buton 
-			//incarc un nou array pt gamestate-ul acesta 
-			//imping pe array-ul respectiv butonul 
-
-			//stiu numarul atasat butonului 
-			//pot folosi numarul ca sa aflu in ce stadiu este
-			std::vector<Button> x;
-			buttons.push_back(x);
-			play = makeButton("play", font, def, hover, active,&buttonsound, 200, 350, 150, 50, _play_);
-			unknown = makeButton("x", font, box, hover_box, hover_box,&buttonsound, 200, 405, 50, 50, _unknown_);
-			settings = makeButton("x", font, box, hover_box, hover_box,&buttonsound, 250, 405, 50, 50, _settings_);
+		case _INTRO:
+		{
+				std::vector<Button> x;
+				buttons.push_back(x);
+				play = makeButton("play", font, def, hover, active, &buttonsound, 200, 350, 150, 50, _play_);
+				media = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 200, 405, 50, 50, _media_);
+				settings = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 250, 405, 50, 50, _settings_);
+				break;
 		}
-	}
-	break;
-	case _MAIN:
-	{
-		if (!wasinit[gamestate])
+		case _MAIN:
 		{
-			wasinit[gamestate] = !wasinit[gamestate];
-			std::vector<Button> y;
-			buttons.push_back(y);
-			buttons.push_back(y);
-			for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
-			{
 				std::vector<Button> y;
-				boxes.push_back(y);
-
-				for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
+				buttons.push_back(y);
+				buttons.push_back(y);
+				for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
 				{
-					//						                |we set the number of the string. If it's 0 we set string to ""     
-					Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]),
-						font, box, hover_box, active_box,&boxsound, xoffset, 105 + yoffset, 50, 50, _box_);
+					std::vector<Button> y;
+					boxes.push_back(y);
 
-					boxes[j].push_back(*btn);
+					for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
+					{
+						//						                |we set the number of the string. If it's 0 we set string to ""     
+						Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]),
+							font, box, hover_box, active_box, &boxsound, xoffset, 105 + yoffset, 50, 50, _box_);
+
+						boxes[j].push_back(*btn);
+
+					}
+
+
+					generate = makeButton("x", font, def, hover, active, &buttonsound, 100, 20, 150, 50, _generate_);
+					solve = makeButton("solve", font, def, hover, active, &buttonsound, 300, 20, 150, 50, _solve_);
 
 				}
-			}
-
-			generate = makeButton("x", font, def, hover, active, &buttonsound, 100, 20, 150, 50, _generate_);
-			solve = makeButton("solve", font, def, hover, active, &buttonsound, 300, 20, 150, 50, _solve_);
+				break;
 		}
-
-
-		break;
-	}
-	break;
-
-	case _SETTINGS:
-
-		break;
+		case _SETTINGS:
+		{
+				break;
+		}
+		case _MEDIA:
+		{
+				break;
+		}
+		}
+		wasinit[gamestate] = !wasinit[gamestate];
 	}
 }
 
@@ -347,7 +343,7 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 			update();
 			render();
 		}
-	
+
 }
 
 
@@ -378,7 +374,7 @@ void Game::renderSprites()
 	case _INTRO:
 		for (int i = 0; i < sprites.size(); i++)
 			window->draw(sprites[i]);
-		
+
 		break;
 
 	default:
@@ -386,7 +382,7 @@ void Game::renderSprites()
 		for (int i = 0; i < sprites.size(); i++)
 		{
 			if (i == 1)continue;
-			window->draw(sprites[i]);   
+			window->draw(sprites[i]);
 		}
 		break;
 	}
@@ -400,7 +396,7 @@ void Game::renderUIbuttons()
 	default:
 		for (int i = 0; i < buttons[gamestate].size(); i++)
 		{
-			drawButton(buttons[gamestate][i]);
+			drawObject(buttons[gamestate][i]);
 
 		}
 		break;
@@ -412,12 +408,12 @@ void Game::renderUIbuttons()
 		{
 			for (int i = 0; i < 9; i++)
 			{
-				drawButton(boxes[j][i]);
+				drawObject(boxes[j][i]);
 			}
 		}
 		for (int i = 0; i < buttons.size() - 1; i++)
 		{
-			drawButton(buttons[_MAIN][i]);
+			drawObject(buttons[_MAIN][i]);
 		}
 		break;
 
@@ -428,22 +424,16 @@ void Game::renderUIbuttons()
 
 }
 
-
-void Game::drawButton(Button button)
+void Game::drawObject(Button button)
 {
 	window->draw(button.button);
 	window->draw(button.getText());
 }
 
-
-
 Game::~Game()
 {
 	delete window;
 }
-
-
-
 sf::Texture* Game::makeTexture(std::string PATH)
 {
 	sf::Texture* temp = new sf::Texture;
@@ -462,7 +452,7 @@ size_t Game::pushSprite(const std::string& PATH)
 	sprites.push_back(sprite);
 	textures.push_back(std::move(texture));
 
-	return sprites.size();
+	return (int)sprites.size();
 }
 
 void Game::popSprite()
