@@ -1,10 +1,15 @@
 #include "Text.h"
 
-Text::Text(std::string str, int x, int y)
+Text::Text(std::string str, sf::Font* tempfont)
 {
-	this->font.loadFromFile("font.ttf");
-	this->text.setFont(font);
+	this->font = tempfont;
+	this->text.setFont(*tempfont);
 	this->text.setString(str);
-	this->text.setPosition(x, y);
 	text.setFillColor(sf::Color::Black);
+	printf("made ");
+}
+
+sf::Text Text::getText()
+{
+	return text;
 }

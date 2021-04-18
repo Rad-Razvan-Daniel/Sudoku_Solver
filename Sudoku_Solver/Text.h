@@ -2,10 +2,13 @@
 #include "SFML/Graphics.hpp"
 class Text
 {
-	sf::Font font;
+protected:
+
+	sf::Font* font = NULL;
 
 	int x = 0, y = 0;
-public:
 	sf::Text text;
-	Text(std::string str, int x, int y);
+	Text(std::string str,sf::Font* tempfont);
+public:
+	sf::Text getText();
 };

@@ -1,5 +1,9 @@
 #include "Game.h"
-
+enum {
+	_default,
+	_hover,
+	_active
+};
 
 Game::Game()
 {
@@ -17,35 +21,130 @@ void Game::mainLoop()
 
 	while (window->isOpen())
 	{
-
-		switch (gamestate)
+		while (window->pollEvent(event))
 		{
-		case _INTRO:
-		case _MAIN:
-			break;
-		case _SOLVING:
-			//change state to active
-			updateButton(_solve_, 2);
-			solve->lockToggle();
-			//lock the state
-			solvingAlgorithmLoop(sudoku->table);
-			//unlock state
-			solve->lockToggle();
-			solvingAlgorithmAnimation(sudoku->table);
-			gamestate--;
-			break;
+
+			switch (gamestate)
+			{
+			case _INTRO:
+			case _MAIN:
+				break;
+			case _SOLVING:
+				//change state to active
+				updateButton(_solve_, 2);
+				solve->lockToggle();
+				//lock the state
+				solvingAlgorithmLoop(sudoku->table);
+				//unlock state
+				solve->lockToggle();
+				solvingAlgorithmAnimation(sudoku->table);
+				gamestate--;
+				break;
 
 
-		case _GENERATING:
-			break;
-		case _SETTINGS:
-			break;
+			case _GENERATING:
+				break;
+			case _SETTINGS:
+				break;
+			}
+
+			update();
 		}
-
-		update();
 		render();
 	}
 }
+
+void Game::update()
+{
+	updateEvents();
+	
+
+		for (int i = 0; i < buttons[gamestate].size(); i++)
+			updateEventButton(&buttons[gamestate][i]);
+
+		if (gamestate == _MAIN || gamestate == _GENERATING || gamestate == _SOLVING)
+			for (int j = 0; j < 9; j++)
+				for (int i = 0; i < 9; i++)
+					updateEventButton(&boxes[j][i]);
+	
+
+}
+
+void Game::updateEvents()
+{
+	switch (event.type)
+	{
+	case sf::Event::Closed:
+		window->close();	break;
+
+	case sf::Event::KeyPressed:
+		if (event.key.code == sf::Keyboard::Escape)
+		{
+			if (gamestate == _MAIN) gamestate = _INTRO;
+			else if (gamestate == _INTRO) window->close();
+		}
+		else if (event.key.code == sf::Keyboard::Enter)
+			if (gamestate == _INTRO)
+			{
+				gamestate = _MAIN;
+				initMisc(); initState();
+			}
+			else if (gamestate == _MAIN)
+			{
+				gamestate = _SOLVING;
+			}
+		break;
+
+
+	case sf::Event::MouseMoved:
+		mousePos = sf::Mouse::getPosition(*window);
+		break;
+
+	default:
+		break;
+	}
+
+}
+
+void Game::updateEventButton(Button* button, int changeState) {
+
+	if (button->bounds->contains(mousePos))
+	{
+		 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			button->updateButton(_active);
+			switch (button->id)
+			{
+
+			case _solve_:
+				gamestate = _SOLVING;
+				break;
+
+			case _generate_:
+				gamestate = _GENERATING;
+				break;
+
+			case _box_:
+				break;
+
+			case _play_: //change of menu
+				gamestate = _MAIN;
+				initMisc(); initState();
+				break;
+
+			case _settings_: //change of menu
+				gamestate = _SETTINGS;
+				initMisc(); initState();
+				break;
+			}
+			return;
+		}
+		//update as hover
+		button->updateButton(1);
+		return;
+	}
+	button->updateButton(0);
+}
+
 void Game::updateButton(int identifier, int changeState, int nr)
 {
 	for (int i = 0; i < sizeof(index); i++)
@@ -115,17 +214,15 @@ void Game::initMisc()
 	}
 
 }
-Button* Game::makeButton(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height, int id)
+Button* Game::makeButton(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, sf::Sound* sound, float x, float y, float width, float height, int id)
 {
 	if (index[id] == 0)
 	{
 		//we have an ID. 
 		//this ID will be inputed into the index and 
-		Button* btn = new Button(str, font, def, hover, active, x, y, width, height, id);
+		Button* btn = new Button(str, font, def, hover, active,sound, x, y, width, height, id);
 		buttons[gamestate].push_back(*btn);
 		index[id] = buttons[gamestate].size() - 1;
-
-		std::cout << "New button, \"" << str << "\" in gamestate " << gamestate << " at index " << index[id] << "\n";// << buttons.size() << " " << index[id] <<
 
 	}
 	return &buttons[gamestate][index[id]];
@@ -158,9 +255,9 @@ void Game::initState()
 			//pot folosi numarul ca sa aflu in ce stadiu este
 			std::vector<Button> x;
 			buttons.push_back(x);
-			play = makeButton("play", font, def, hover, active, 200, 350, 150, 50, _play_);
-			unknown = makeButton("x", font, box, hover_box, hover_box, 200, 405, 50, 50, _unknown_);
-			settings = makeButton("x", font, box, hover_box, hover_box, 250, 405, 50, 50, _settings_);
+			play = makeButton("play", font, def, hover, active,&sound, 200, 350, 150, 50, _play_);
+			unknown = makeButton("x", font, box, hover_box, hover_box,&sound, 200, 405, 50, 50, _unknown_);
+			settings = makeButton("x", font, box, hover_box, hover_box,&sound, 250, 405, 50, 50, _settings_);
 		}
 	}
 	break;
@@ -181,15 +278,15 @@ void Game::initState()
 				{
 					//						                |we set the number of the string. If it's 0 we set string to ""     
 					Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]),
-						font, box, hover_box, active_box, xoffset, 105 + yoffset, 50, 50, _box_);
+						font, box, hover_box, active_box,&sound, xoffset, 105 + yoffset, 50, 50, _box_);
 
 					boxes[j].push_back(*btn);
 
 				}
 			}
 
-			generate = makeButton("x", font, def, hover, active, 100, 20, 150, 50, _generate_);
-			solve = makeButton("solve", font, def, hover, active, 300, 20, 150, 50, _solve_);
+			generate = makeButton("x", font, def, hover, active, &sound, 100, 20, 150, 50, _generate_);
+			solve = makeButton("solve", font, def, hover, active, &sound, 300, 20, 150, 50, _solve_);
 		}
 
 
@@ -252,104 +349,6 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 	
 }
 
-
-void Game::update()
-{
-	updateEvents();
-
-	for (int i = 0; i < buttons[gamestate].size(); i++)
-		updateEventButton(&buttons[gamestate][i]);
-
-	if (gamestate == _MAIN || gamestate == _GENERATING || gamestate == _SOLVING)
-		for (int j = 0; j < 9; j++)
-			for (int i = 0; i < 9; i++)
-				updateEventButton(&boxes[j][i]);
-			
-
-}
-
-void Game::updateEvents()
-{
-	while (window->pollEvent(event))
-	{
-		switch (event.type)
-		{
-		case sf::Event::Closed:
-			window->close();	break;
-
-		case sf::Event::KeyPressed:
-			if (event.key.code == sf::Keyboard::Escape)
-			{
-				if (gamestate == _MAIN) gamestate = _INTRO;
-				else if (gamestate == _INTRO) window->close();
-			}
-			else if (event.key.code == sf::Keyboard::Enter)
-				if (gamestate == _INTRO)
-				{
-					gamestate = _MAIN;
-					initMisc(); initState();
-				}
-				else if (gamestate == _MAIN)
-				{
-					gamestate = _SOLVING;
-				}
-			break;
-
-
-		case sf::Event::MouseMoved:
-			mousePos = sf::Mouse::getPosition(*window);
-			break;
-
-		default:
-			break;
-		}
-	}
-}
-
-void Game::updateEventButton(Button* button, int changeState){
-
-	if (button->bounds->contains(mousePos))
-	{
-		if (sf::Event::MouseButtonReleased)
-		{
-			std::cout << "releaesd!\n";
-		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			button->updateButton(2);
-			switch (button->id)
-			{
-
-			case _solve_:
-				gamestate = _SOLVING;
-				break;
-
-			case _generate_:
-				gamestate = _GENERATING;
-				break;
-
-			case _box_:
-				break;
-
-			case _play_: //change of menu
-				sound.play();
-				std::cout << "played sound";
-				gamestate = _MAIN;
-				initMisc(); initState();
-				break;
-
-			case _settings_: //change of menu
-				gamestate = _SETTINGS;
-				initMisc(); initState();
-				break;
-			}
-			return;
-		}
-		//update as hover
-		button->updateButton(1);
-		return;
-	}
-	button->updateButton(0);
-}
 
 
 
@@ -432,7 +431,7 @@ void Game::renderUIbuttons()
 void Game::drawButton(Button button)
 {
 	window->draw(button.button);
-	window->draw(button.text);
+	window->draw(button.getText());
 }
 
 

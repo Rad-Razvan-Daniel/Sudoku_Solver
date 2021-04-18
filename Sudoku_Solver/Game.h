@@ -73,7 +73,7 @@ class Game
 	sf::Texture* makeTexture(std::string PATH);
 //TABLE
 	Table* sudoku;
-	Button* makeButton(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active, float x, float y, float width, float height, int id);
+	Button* makeButton(std::string str, sf::Font* font, sf::Texture* def, sf::Texture* hover, sf::Texture* active,sf::Sound* sound, float x, float y, float width, float height, int id);
 	bool solvingAlgorithmLoop(int table[9][9]);
 
 	void solvingAlgorithmAnimation(int table[9][9]);
