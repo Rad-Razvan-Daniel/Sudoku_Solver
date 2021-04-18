@@ -196,10 +196,12 @@ void Game::initMisc()
 	case _INTRO:
 		music.openFromFile("Resources\\Sounds\\music.wav");
 		music.play();
+		music.setLoop(true);
+		music.setVolume(10);
 
 		buffer.loadFromFile("Resources\\Sounds\\sound.ogg");
-		sound.setBuffer(buffer);
-
+		buttonsound.setBuffer(buffer);
+		buttonsound.setVolume(20);
 		boxbuffer.loadFromFile("Resources\\Sounds\\boxsound.wav");
 		boxsound.setBuffer(boxbuffer);
 		break;
@@ -254,9 +256,9 @@ void Game::initState()
 			//pot folosi numarul ca sa aflu in ce stadiu este
 			std::vector<Button> x;
 			buttons.push_back(x);
-			play = makeButton("play", font, def, hover, active,&sound, 200, 350, 150, 50, _play_);
-			unknown = makeButton("x", font, box, hover_box, hover_box,&sound, 200, 405, 50, 50, _unknown_);
-			settings = makeButton("x", font, box, hover_box, hover_box,&sound, 250, 405, 50, 50, _settings_);
+			play = makeButton("play", font, def, hover, active,&buttonsound, 200, 350, 150, 50, _play_);
+			unknown = makeButton("x", font, box, hover_box, hover_box,&buttonsound, 200, 405, 50, 50, _unknown_);
+			settings = makeButton("x", font, box, hover_box, hover_box,&buttonsound, 250, 405, 50, 50, _settings_);
 		}
 	}
 	break;
@@ -284,8 +286,8 @@ void Game::initState()
 				}
 			}
 
-			generate = makeButton("x", font, def, hover, active, &sound, 100, 20, 150, 50, _generate_);
-			solve = makeButton("solve", font, def, hover, active, &sound, 300, 20, 150, 50, _solve_);
+			generate = makeButton("x", font, def, hover, active, &buttonsound, 100, 20, 150, 50, _generate_);
+			solve = makeButton("solve", font, def, hover, active, &buttonsound, 300, 20, 150, 50, _solve_);
 		}
 
 

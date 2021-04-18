@@ -66,7 +66,7 @@ class Game
 	void updateButton(int identifier = INT_MIN, int changeState = 0, int nr = INT_MIN);
 	sf::SoundBuffer buffer;
 	sf::Music music;
-	sf::Sound sound;
+	sf::Sound buttonsound;
 	sf::SoundBuffer boxbuffer;
 	sf::Sound boxsound;
 public:
