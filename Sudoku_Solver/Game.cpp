@@ -23,7 +23,6 @@ void Game::mainLoop()
 
 			case _SOLVING:
 				//change state to active
-				//updateButton(_solve_, 2);
 				solve->lockToggle();
 				//lock the state
 				solvingAlgorithmLoop(sudoku->table);
@@ -139,7 +138,6 @@ void Game::updateButtonEvent(Button* button) {
 
 			case _play_: //change of menu
 				gamestate = _MAIN;
-				button->updateButton(2);
 				initState();
 				break;
 
@@ -148,7 +146,7 @@ void Game::updateButtonEvent(Button* button) {
 				initState();
 				break; 
 			case _back_:
-				gamestate == _INTRO;
+				gamestate = _INTRO;
 				std::cout << "gamestate" << gamestate;
 				break;
 			}
@@ -207,16 +205,19 @@ void Game::initMisc()
 	switch (gamestate)
 	{
 	case _INTRO:
+		
+		activeTexture = makeTexture("active_button.jpg");
+		defaultTexture = makeTexture("button.jpg");
+		hoverTexture = makeTexture("hover_button.jpg");
 
-		active = makeTexture("active_image.jpg");
-		def = makeTexture("image.jpg");
-		hover = makeTexture("hover_image.jpg");
+		defaultBoxTexture = makeTexture("box.jpg");
+		hoverBoxTexture = makeTexture("hover_box.jpg");
+		activeBoxTexture = makeTexture("active_box.jpg");
 
-		box = makeTexture("box.jpg");
-		hover_box = makeTexture("hover_box.jpg");
-		active_box = makeTexture("active_box.jpg");
-
-
+		defaultBackTexture = makeTexture("back.jpg");
+		hoverBackTexture = makeTexture("hover_back.jpg");
+		activeBackTexture = makeTexture("active_back.jpg");
+		
 		music.openFromFile("Resources\\Sounds\\music.ogg");
 		music.play();
 		music.setLoop(true);
@@ -232,6 +233,7 @@ void Game::initMisc()
 
 
 	case _MAIN:
+		
 		initTable();
 		break;
 	case _SETTINGS:
@@ -260,7 +262,7 @@ void Game::initState()
 		std::vector<Button> y;
 		buttons.push_back(y);
 		buttons.push_back(y);
-		std::cout << buttons.size();
+
 		initMisc();
 		switch (gamestate)
 		{
@@ -271,9 +273,9 @@ void Game::initState()
 			int localXoffset = 0;
 			int locaYoffset = 0;
 			
-			play = makeButton("play", font, def, hover, active, &buttonsound, 200, 350, 150, 50, _play_);
-			media = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 200, 405, 50, 50, _media_);
-			settings = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 250, 405, 50, 50, _settings_);
+			play = makeButton("play", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 200, 350, 150, 50, _play_);
+			media = makeButton("x", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 200, 405, 50, 50, _media_);
+			settings = makeButton("x", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 250, 405, 50, 50, _settings_);
 			break;
 		}
 		case _MAIN:
@@ -286,14 +288,14 @@ void Game::initState()
 				{
 					//						                |we set the number of the string. If it's 0 we set string to ""     
 					Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]),
-						font, box, hover_box, active_box, &boxsound, xoffset, 105 + yoffset, 50, 50, _box_);
+						font,defaultBoxTexture, hoverBoxTexture, activeBoxTexture, &boxsound, xoffset, 105 + yoffset, 50, 50, _box_);
 
 					boxes[j].push_back(*btn);
 
 				}
-				back = makeButton("x", font, def, hover, active, &buttonsound, 0, 0, 150, 50, _back_);
-				generate = makeButton("generate", font, def, hover, active, &buttonsound, 145, 20, 150, 50, _generate_);
-				solve = makeButton("solve", font, def, hover, active, &buttonsound, 300, 20, 150, 50, _solve_);
+				back = makeButton("", font, defaultBackTexture, hoverBackTexture, activeBackTexture, &boxsound, 90, 20, 50, 50, _back_);
+				generate = makeButton("generate", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 145, 20, 150, 50, _generate_);
+				solve = makeButton("solve", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 300, 20, 150, 50, _solve_);
 				
 			}
 			break;
@@ -373,7 +375,7 @@ void Game::render()
 	//draws everything except interractables.
 	renderSprites();
 	renderUIbuttons();
-	//draws boxes
+	//drawsboxTexturees
 
 
 	window->display();

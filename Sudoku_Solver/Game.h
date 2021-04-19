@@ -24,7 +24,6 @@ class Game
 	sf::Event event;
 
 	//RENDERING
-	int bg;
 	std::vector<sf::Text> texts;
 	std::vector<sf::Sprite> sprites;
 	std::vector<std::unique_ptr<sf::Texture>> textures;
@@ -47,13 +46,18 @@ class Game
 	Button* linkedin = nullptr;
 	Button* back = nullptr;
 	//BUTTON GRAPHICS SPECIFIC
-	sf::Texture* def = nullptr;
-	sf::Texture* hover = nullptr;
-	sf::Texture* active = nullptr;
+	sf::Texture* defaultTexture = nullptr;
+	sf::Texture* hoverTexture = nullptr;
+	sf::Texture* activeTexture = nullptr;
 
-	sf::Texture* box = nullptr;
-	sf::Texture* hover_box = nullptr;
-	sf::Texture* active_box = nullptr;
+	sf::Texture* defaultBoxTexture = nullptr;
+	sf::Texture* hoverBoxTexture = nullptr;
+	sf::Texture* activeBoxTexture = nullptr;
+
+
+	sf::Texture* defaultBackTexture = nullptr;
+	sf::Texture* hoverBackTexture = nullptr;
+	sf::Texture* activeBackTexture = nullptr;
 
 	sf::Vector2i mousePos;
 	//Rendering
