@@ -153,6 +153,9 @@ void Game::updateButtonEvent(Button* button) {
 			return;
 		}
 		//update as hover
+		else if(sf::Event::MouseButtonReleased)
+		{
+		}
 		button->updateButton(1);
 		return;
 	}
