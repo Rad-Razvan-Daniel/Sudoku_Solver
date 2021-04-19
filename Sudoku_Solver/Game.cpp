@@ -124,18 +124,31 @@ void Game::updateButtonEvent(Button* button) {
 			switch (button->id)
 			{
 
+
+
+			case _box_:
+				break;
+
+
+			}
+			return;
+		}
+		//update as hover
+		else if(event.type == sf::Event::MouseButtonReleased)
+		{
+			switch (button->id)
+			{
+			case _back_:
+				gamestate = _INTRO;
+				break;
 			case _solve_:
-				button->updateButton(2);
+				//button->updateButton(_active);
 				gamestate = _SOLVING;
 				break;
 
 			case _generate_:
 				gamestate = _GENERATING;
 				break;
-
-			case _box_:
-				break;
-
 			case _play_: //change of menu
 				gamestate = _MAIN;
 				initState();
@@ -144,22 +157,13 @@ void Game::updateButtonEvent(Button* button) {
 			case _settings_: //change of menu
 				gamestate = _SETTINGS;
 				initState();
-				break; 
-			case _back_:
-				gamestate = _INTRO;
-				std::cout << "gamestate" << gamestate;
 				break;
 			}
-			return;
 		}
-		//update as hover
-		else if(sf::Event::MouseButtonReleased)
-		{
-		}
-		button->updateButton(1);
+		button->updateButton(_hover);
 		return;
 	}
-	button->updateButton(0);
+	button->updateButton(_default);
 }
 
 void Game::updateButton(int identifier, int changeState, int nr)

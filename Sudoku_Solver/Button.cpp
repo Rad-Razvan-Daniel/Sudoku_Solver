@@ -64,8 +64,11 @@ void Button::updateButton(int changeState, int nr)
 		
 		if (changeState != state)
 		{
-			if (changeState == _hover && state == _active && (id == _box_ || id == _back_)) sound->play();
-			else if ( (id == _play_ || id == _generate_ || id == _solve_) && changeState == _active)sound->play();
+			
+			if (changeState == _hover && state == _active) sound->play();
+
+			//else if (changeState == _active 
+				//&&(id == _play_ || id == _generate_ || id == _solve_))sound->play();
 			state = changeState;
 			refreshTexture();
 		}
