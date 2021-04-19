@@ -4,26 +4,26 @@ Game::Game()
 {
 	initWindow();
 	initFont();
-	textureIndex[0] = pushSprite("background.jpg");
-	textureIndex[1] = pushSprite("introBackground.jpg");
-	sprites[1].setScale(4, 4);
+	textureIndex[background] = pushSprite("background.jpg");
+	textureIndex[introBackground] = pushSprite("introBackground.jpg");
+	textureIndex[bgoverlay] = pushSprite("bgoverlay.png");
+	sprites[background].setScale(18.75,18.75);
+	sprites[introBackground].setScale(3.733333333, 4);
 
 	initState();
 }
 
 void Game::mainLoop()
 {
-	while (window->isOpen()){
-		while (window->pollEvent(event)){
+	while (window->isOpen()) {
+		while (window->pollEvent(event)) {
 
 			switch (gamestate)
 			{
 
-
-
 			case _SOLVING:
 				//change state to active
-				updateButton(_solve_, 2);
+				//updateButton(_solve_, 2);
 				solve->lockToggle();
 				//lock the state
 				solvingAlgorithmLoop(sudoku->table);
@@ -86,7 +86,7 @@ void Game::updateEvents()
 			}
 			else if (gamestate == _MAIN)
 				gamestate = _SOLVING;
-			
+
 		break;
 
 
@@ -246,43 +246,49 @@ void Game::initState()
 		{
 		case _INTRO:
 		{
-				std::vector<Button> x;
-				buttons.push_back(x);
-				play = makeButton("play", font, def, hover, active, &buttonsound, 200, 350, 150, 50, _play_);
-				media = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 200, 405, 50, 50, _media_);
-				settings = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 250, 405, 50, 50, _settings_);
-				break;
+			std::vector<Button> x;
+			buttons.push_back(x);
+			play = makeButton("play", font, def, hover, active, &buttonsound, 200, 350, 150, 50, _play_);
+			media = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 200, 405, 50, 50, _media_);
+			settings = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 250, 405, 50, 50, _settings_);
+			break;
 		}
 		case _MAIN:
 		{
+			std::vector<Button> y;
+			buttons.push_back(y);
+			buttons.push_back(y);
+			for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
+			{
 				std::vector<Button> y;
-				buttons.push_back(y);
-				buttons.push_back(y);
-				for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
+				boxes.push_back(y);
+
+				for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
 				{
-					std::vector<Button> y;
-					boxes.push_back(y);
+					//						                |we set the number of the string. If it's 0 we set string to ""     
+					Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]),
+						font, box, hover_box, active_box, &boxsound, xoffset, 105 + yoffset, 50, 50, _box_);
 
-					for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
-					{
-						//						                |we set the number of the string. If it's 0 we set string to ""     
-						Button* btn = new Button((std::to_string(sudoku->table[j][i]) == "0") ? "" : std::to_string(sudoku->table[j][i]),
-							font, box, hover_box, active_box, &boxsound, xoffset, 105 + yoffset, 50, 50, _box_);
-
-						boxes[j].push_back(*btn);
-
-					}
-
-
-					generate = makeButton("x", font, def, hover, active, &buttonsound, 100, 20, 150, 50, _generate_);
-					solve = makeButton("solve", font, def, hover, active, &buttonsound, 300, 20, 150, 50, _solve_);
+					boxes[j].push_back(*btn);
 
 				}
-				break;
+
+
+				generate = makeButton("generate", font, def, hover, active, &buttonsound, 145, 20, 150, 50, _generate_);
+				solve = makeButton("solve", font, def, hover, active, &buttonsound, 300, 20, 150, 50, _solve_);
+
+			}
+			break;
 		}
 		case _SETTINGS:
 		{
-				break;
+			break;
+		}
+		case _MEDIA:
+		{
+			std::vector<Button> y;
+			buttons.push_back(y);
+			break;
 		}
 		}
 		wasinit[gamestate] = !wasinit[gamestate];
@@ -344,9 +350,9 @@ void Game::solvingAlgorithmAnimation(int table[9][9])
 void Game::render()
 {
 
-	sf::Color bgcol(245, 243, 194);
+	sf::Color col(245, 243, 194);
 	//remember to add button to the vector of printable stuff before you try to print it
-	window->clear(bgcol);
+	window->clear(col);
 	//draws everything except interractables.
 	renderSprites();
 	renderUIbuttons();
@@ -365,8 +371,10 @@ void Game::renderSprites()
 
 	case _INTRO:
 		for (int i = 0; i < sprites.size(); i++)
+		{
+			if (i == 2) continue;
 			window->draw(sprites[i]);
-
+		}
 		break;
 
 	default:

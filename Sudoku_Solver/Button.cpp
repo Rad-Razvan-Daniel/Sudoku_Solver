@@ -57,7 +57,7 @@ bool Button::isLockOn()
 
 void Button::updateButton(int changeState, int nr)
 {
-	if (changeable)
+ 	if (changeable)
 	{
 		if (nr != INT_MIN)
 			setText(nr);

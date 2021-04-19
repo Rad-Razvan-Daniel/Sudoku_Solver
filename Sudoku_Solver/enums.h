@@ -21,3 +21,8 @@ enum buttons {//ID's
 	_media_
 
 };
+enum {
+	background,
+	introBackground,
+	bgoverlay
+};
