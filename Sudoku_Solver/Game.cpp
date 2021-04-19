@@ -49,7 +49,7 @@ void Game::update()
 {
 	updateEvents();
 
-
+	std::cout << gamestate;
 	for (int i = 0; i < buttons[gamestate].size(); i++)
 	{
 		updateButtonEvent(&buttons[gamestate][i]);
@@ -69,7 +69,8 @@ void Game::update()
 				updateButtonEvent(&boxes[j][i]);
 		break;
 	case _MEDIA:
-
+	case _SETTINGS:
+		//updateButtonEvent(back);
 		break;
 	}
 	
@@ -86,7 +87,7 @@ void Game::updateEvents()
 	case sf::Event::KeyPressed:
 		if (event.key.code == sf::Keyboard::Escape)
 		{
-			if (gamestate == _MAIN) gamestate = _INTRO;
+			if (gamestate == _MAIN || gamestate == _MEDIA || gamestate == _SETTINGS) gamestate = _INTRO;
 			else if (gamestate == _INTRO) window->close();
 		}
 		else if (event.key.code == sf::Keyboard::Enter)
@@ -156,6 +157,10 @@ void Game::updateButtonEvent(Button* button) {
 
 			case _settings_: //change of menu
 				gamestate = _SETTINGS;
+				initState();
+				break;
+			case _media_:
+				gamestate = _MEDIA;
 				initState();
 				break;
 			}
@@ -267,6 +272,7 @@ void Game::initState()
 	{
 		
 		std::vector<Button> y;
+		
 		buttons.push_back(y);
 		buttons.push_back(y);
 
@@ -279,14 +285,17 @@ void Game::initState()
 		{
 			int localXoffset = 0;
 			int locaYoffset = 0;
-			
 			play = makeButton("play", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 200, 350, 150, 50, _play_);
-			media = makeButton("x", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 200, 405, 50, 50, _media_);
+			media = makeButton("zx", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 200, 405, 50, 50, _media_);
 			settings = makeButton("x", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 250, 405, 50, 50, _settings_);
 			break;
 		}
 		case _MAIN:
 		{
+			back = makeButton("", font, defaultBackTexture, hoverBackTexture, activeBackTexture, &boxsound, 90, 20, 50, 50, _back_);
+
+			generate = makeButton("generate", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 145, 20, 150, 50, _generate_);
+			solve = makeButton("solve", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 300, 20, 150, 50, _solve_);
 			for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
 			{
 				boxes.push_back(y);
@@ -300,9 +309,7 @@ void Game::initState()
 					boxes[j].push_back(*btn);
 
 				}
-				back = makeButton("", font, defaultBackTexture, hoverBackTexture, activeBackTexture, &boxsound, 90, 20, 50, 50, _back_);
-				generate = makeButton("generate", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 145, 20, 150, 50, _generate_);
-				solve = makeButton("solve", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 300, 20, 150, 50, _solve_);
+
 				
 			}
 			break;
@@ -313,7 +320,21 @@ void Game::initState()
 		}
 		case _MEDIA:
 		{
-
+			std::ifstream read;
+			read.open("Resources\\media.txt");
+			std::string tempstr;
+			std::cout << "loaded";
+			int i = 0;
+			while (std::getline(read,tempstr))
+			{
+				sf::Text* text = new sf::Text;
+				text->setFont(*font);
+				text->setString(tempstr);
+				text->setPosition(0,i*50);
+				text->setFillColor(sf::Color::Black);
+				texts.push_back(text);
+				i++;
+			}
 			break;
 		}
 		}
@@ -398,7 +419,14 @@ void Game::renderSprites()
 	case _INTRO:
 		window->draw(sprites[introBackground]);
 		break;
-
+	case _MEDIA:
+		window->draw(sprites[background]);
+		//drawObject(*back)
+		for (int i = 0; i < texts.size(); i++)
+		{
+			window->draw(*texts[i]);
+		}
+		break;
 	default:
 		window->draw(sprites[background]);
 		window->draw(sprites[bgoverlay]);
@@ -435,8 +463,11 @@ void Game::renderUIbuttons()
 		}
 		break;
 
+	case _MEDIA:
+	case _SETTINGS:
+		//drawObject(*back);
+		break;
 	}
-
 
 }
 

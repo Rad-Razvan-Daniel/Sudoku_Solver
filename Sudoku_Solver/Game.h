@@ -24,7 +24,7 @@ class Game
 	sf::Event event;
 
 	//RENDERING
-	std::vector<sf::Text> texts;
+	std::vector<sf::Text*> texts;
 	std::vector<sf::Sprite> sprites;
 	std::vector<std::unique_ptr<sf::Texture>> textures;
 	sf::Font* font;
