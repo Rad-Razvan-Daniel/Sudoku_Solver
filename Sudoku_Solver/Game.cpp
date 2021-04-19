@@ -52,17 +52,28 @@ void Game::update()
 
 
 	for (int i = 0; i < buttons[gamestate].size(); i++)
-		updateEventButton(&buttons[gamestate][i]);
+	{
+		updateButtonEvent(&buttons[gamestate][i]);
+		if (gamestate == _SOLVING)
+		{
+			updateButtonEvent(&buttons[_MAIN][i]);
+		}
+	}
 
-	if (gamestate == _MAIN || gamestate == _GENERATING || gamestate == _SOLVING)
+	switch (gamestate)
+	{
+	case _MAIN:
+	case _SOLVING:
+	case _GENERATING:
 		for (int j = 0; j < 9; j++)
 			for (int i = 0; i < 9; i++)
-				updateEventButton(&boxes[j][i]);
+				updateButtonEvent(&boxes[j][i]);
+		break;
+	case _MEDIA:
 
-	if (gamestate == _MEDIA)
-	{
-
+		break;
 	}
+	
 }
 
 void Game::updateEvents()
@@ -70,7 +81,8 @@ void Game::updateEvents()
 	switch (event.type)
 	{
 	case sf::Event::Closed:
-		window->close();	break;
+		window->close();	
+		break;
 
 	case sf::Event::KeyPressed:
 		if (event.key.code == sf::Keyboard::Escape)
@@ -79,14 +91,18 @@ void Game::updateEvents()
 			else if (gamestate == _INTRO) window->close();
 		}
 		else if (event.key.code == sf::Keyboard::Enter)
+		{
+			buttonsound.play();
 			if (gamestate == _INTRO)
 			{
 				gamestate = _MAIN;
 				initState();
 			}
 			else if (gamestate == _MAIN)
+			{
 				gamestate = _SOLVING;
-
+			}
+		}
 		break;
 
 
@@ -100,7 +116,7 @@ void Game::updateEvents()
 
 }
 
-void Game::updateEventButton(Button* button) {
+void Game::updateButtonEvent(Button* button) {
 
 	if (button->bounds->contains(mousePos))
 	{
@@ -130,6 +146,10 @@ void Game::updateEventButton(Button* button) {
 			case _settings_: //change of menu
 				gamestate = _SETTINGS;
 				initState();
+				break; 
+			case _back_:
+				gamestate == _INTRO;
+				std::cout << "gamestate" << gamestate;
 				break;
 			}
 			return;
@@ -152,11 +172,7 @@ void Game::updateButton(int identifier, int changeState, int nr)
 		}
 	}
 }
-void Game::initTable()
-{
-	sudoku = new Table();
 
-}
 void Game::initWindow()
 {
 	//given initial values in case we can't open settings
@@ -182,11 +198,10 @@ void Game::initWindow()
 			frame_limit = 30;
 	}
 
-	window = new sf::RenderWindow(sf::VideoMode(width, height), x);
+	window = new sf::RenderWindow(sf::VideoMode(width, height), x, sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(frame_limit);
 	window->setVerticalSyncEnabled(vsync);
 }
-
 void Game::initMisc()
 {
 	switch (gamestate)
@@ -241,13 +256,21 @@ void Game::initState()
 {
 	if (!wasinit[gamestate])
 	{
+		
+		std::vector<Button> y;
+		buttons.push_back(y);
+		buttons.push_back(y);
+		std::cout << buttons.size();
 		initMisc();
 		switch (gamestate)
 		{
+		case _SOLVING:
+			break;
 		case _INTRO:
 		{
-			std::vector<Button> x;
-			buttons.push_back(x);
+			int localXoffset = 0;
+			int locaYoffset = 0;
+			
 			play = makeButton("play", font, def, hover, active, &buttonsound, 200, 350, 150, 50, _play_);
 			media = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 200, 405, 50, 50, _media_);
 			settings = makeButton("x", font, box, hover_box, hover_box, &buttonsound, 250, 405, 50, 50, _settings_);
@@ -255,12 +278,8 @@ void Game::initState()
 		}
 		case _MAIN:
 		{
-			std::vector<Button> y;
-			buttons.push_back(y);
-			buttons.push_back(y);
 			for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
 			{
-				std::vector<Button> y;
 				boxes.push_back(y);
 
 				for (int i = 0; i < 9; i++, xoffset += ((i % 3 == 0 && i != 0) ? 55 : 50)) // row iter
@@ -272,11 +291,10 @@ void Game::initState()
 					boxes[j].push_back(*btn);
 
 				}
-
-
+				back = makeButton("x", font, def, hover, active, &buttonsound, 0, 0, 150, 50, _back_);
 				generate = makeButton("generate", font, def, hover, active, &buttonsound, 145, 20, 150, 50, _generate_);
 				solve = makeButton("solve", font, def, hover, active, &buttonsound, 300, 20, 150, 50, _solve_);
-
+				
 			}
 			break;
 		}
@@ -286,8 +304,7 @@ void Game::initState()
 		}
 		case _MEDIA:
 		{
-			std::vector<Button> y;
-			buttons.push_back(y);
+
 			break;
 		}
 		}
@@ -370,20 +387,12 @@ void Game::renderSprites()
 	{
 
 	case _INTRO:
-		for (int i = 0; i < sprites.size(); i++)
-		{
-			if (i == 2) continue;
-			window->draw(sprites[i]);
-		}
+		window->draw(sprites[introBackground]);
 		break;
 
 	default:
-		window->draw(sprites[bg]);
-		for (int i = 0; i < sprites.size(); i++)
-		{
-			if (i == 1)continue;
-			window->draw(sprites[i]);
-		}
+		window->draw(sprites[background]);
+		window->draw(sprites[bgoverlay]);
 		break;
 	}
 
@@ -463,4 +472,9 @@ void Game::initFont()
 	sf::Font* temp = new sf::Font;
 	temp->loadFromFile("Resources\\Fonts\\font.ttf");
 	font = temp;
+}
+void Game::initTable()
+{
+	sudoku = new Table();
+
 }

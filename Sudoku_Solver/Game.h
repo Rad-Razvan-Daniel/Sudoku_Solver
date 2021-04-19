@@ -39,19 +39,21 @@ class Game
 	int index[10] = { 0,0,0,0,0,0,0,0,0,0};
 	int textureIndex[4];
 //BUTTONS
-	Button* solve;
-	Button* generate;
-	Button* play;
-	Button* settings; 
-	Button* media;
+	Button* solve = nullptr;
+	Button* generate = nullptr;
+	Button* play = nullptr;
+	Button* settings = nullptr;
+	Button* media = nullptr;
+	Button* linkedin = nullptr;
+	Button* back = nullptr;
 	//BUTTON GRAPHICS SPECIFIC
-	sf::Texture* def;
-	sf::Texture* hover;
-	sf::Texture* active;
+	sf::Texture* def = nullptr;
+	sf::Texture* hover = nullptr;
+	sf::Texture* active = nullptr;
 
-	sf::Texture* box;
-	sf::Texture* hover_box;
-	sf::Texture* active_box;
+	sf::Texture* box = nullptr;
+	sf::Texture* hover_box = nullptr;
+	sf::Texture* active_box = nullptr;
 
 	sf::Vector2i mousePos;
 	//Rendering
@@ -71,7 +73,7 @@ class Game
 	sf::Sound boxsound;
 public:
 
-	void updateEventButton(Button* button); //can change gamestate
+	void updateButtonEvent(Button* button); //can change gamestate
 	std::vector<std::vector<Button>> boxes;
 	std::vector<std::vector<Button>> buttons;
 	int gamestate = 0;
