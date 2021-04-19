@@ -38,13 +38,6 @@ class Game
 	int index[10] = { 0,0,0,0,0,0,0,0,0,0};
 	int textureIndex[4];
 //BUTTONS
-	Button* solve = nullptr;
-	Button* generate = nullptr;
-	Button* play = nullptr;
-	Button* settings = nullptr;
-	Button* media = nullptr;
-	Button* linkedin = nullptr;
-	Button* back = nullptr;
 	//BUTTON GRAPHICS SPECIFIC
 	sf::Texture* defaultTexture = nullptr;
 	sf::Texture* hoverTexture = nullptr;

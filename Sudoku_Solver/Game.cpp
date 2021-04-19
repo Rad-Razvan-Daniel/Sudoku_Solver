@@ -23,11 +23,11 @@ void Game::mainLoop()
 
 			case _SOLVING:
 				//change state to active
-				solve->lockToggle();
+				buttons[_MAIN][index[_solve_]].lockToggle();
 				//lock the state
 				solvingAlgorithmLoop(sudoku->table);
 				//unlock state
-				solve->lockToggle();
+				buttons[_MAIN][index[_solve_]].lockToggle();
 				solvingAlgorithmAnimation(sudoku->table);
 				gamestate--;
 				break;
@@ -285,17 +285,17 @@ void Game::initState()
 		{
 			int localXoffset = 0;
 			int locaYoffset = 0;
-			play = makeButton("play", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 200, 350, 150, 50, _play_);
-			media = makeButton("zx", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 200, 405, 50, 50, _media_);
-			settings = makeButton("x", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 250, 405, 50, 50, _settings_);
+			makeButton("play", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 200, 350, 150, 50, _play_);
+			makeButton("zx", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 200, 405, 50, 50, _media_);
+			makeButton("x", font,defaultBoxTexture, hoverBoxTexture, hoverBoxTexture, &buttonsound, 250, 405, 50, 50, _settings_);
 			break;
 		}
 		case _MAIN:
 		{
-			back = makeButton("", font, defaultBackTexture, hoverBackTexture, activeBackTexture, &boxsound, 90, 20, 50, 50, _back_);
+			makeButton("", font, defaultBackTexture, hoverBackTexture, activeBackTexture, &boxsound, 90, 20, 50, 50, _back_);
 
-			generate = makeButton("generate", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 145, 20, 150, 50, _generate_);
-			solve = makeButton("solve", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 300, 20, 150, 50, _solve_);
+			makeButton("generate", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 145, 20, 150, 50, _generate_);
+			makeButton("solve", font, defaultTexture, hoverTexture, activeTexture, &buttonsound, 300, 20, 150, 50, _solve_);
 			for (int j = 0, yoffset = 0, xoffset = 50; j < 9; j++, yoffset += (j % 3 == 0 && j != 0) ? 55 : 50, xoffset = 50) //col iter
 			{
 				boxes.push_back(y);
